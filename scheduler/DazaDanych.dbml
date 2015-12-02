@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="dtas_s383964" Class="DazaDanychDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=dtas_s383964;User ID=s383964" SettingsObjectName="scheduler.Properties.Settings" SettingsPropertyName="dtas_s383964ConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Grupa" Member="Grupas">
+    <Type Name="Grupa">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nazwa" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="kierunek" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="rok" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="miejsca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Grupa_Student" Member="Students" ThisKey="id" OtherKey="id_grupy" Type="Student" />
+      <Association Name="Grupa_Pozycja_planu" Member="Pozycja_planus" ThisKey="id" OtherKey="id_grupy" Type="Pozycja_planu" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Student" Member="Students">
+    <Type Name="Student">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nazwa" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="indeks" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="id_grupy" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="rok" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Grupa_Student" Member="Grupa" ThisKey="id_grupy" OtherKey="id" Type="Grupa" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pozycja_planu" Member="Pozycja_planus">
+    <Type Name="Pozycja_planu">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_prowadźącego" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="id_grupy" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="id_przedmiotu" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="id_sali" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="dzień" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="godzina_od" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" />
+      <Column Name="godzina_do" Type="System.TimeSpan" DbType="Time NOT NULL" CanBeNull="false" />
+      <Association Name="Grupa_Pozycja_planu" Member="Grupa" ThisKey="id_grupy" OtherKey="id" Type="Grupa" IsForeignKey="true" />
+      <Association Name="Prowadzący_Pozycja_planu" Member="Prowadzący" ThisKey="id_prowadźącego" OtherKey="id" Type="Prowadzący" IsForeignKey="true" />
+      <Association Name="Przedmiot_Pozycja_planu" Member="Przedmiot" ThisKey="id_przedmiotu" OtherKey="id" Type="Przedmiot" IsForeignKey="true" />
+      <Association Name="Sala_Pozycja_planu" Member="Sala" ThisKey="id_sali" OtherKey="id" Type="Sala" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Prowadzący" Member="Prowadzącies">
+    <Type Name="Prowadzący">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nazwa" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="tytuł" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Prowadzący_Pozycja_planu" Member="Pozycja_planus" ThisKey="id" OtherKey="id_prowadźącego" Type="Pozycja_planu" />
+      <Association Name="Prowadzący_Przypisany_przedmiot" Member="Przypisany_przedmiots" ThisKey="id" OtherKey="id_prowadźącego" Type="Przypisany_przedmiot" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Przedmiot" Member="Przedmiots">
+    <Type Name="Przedmiot">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nazwa" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="rok" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="semestr" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="kierunek" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="wykład" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ćwiczenia" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="laboratoria" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Przedmiot_Pozycja_planu" Member="Pozycja_planus" ThisKey="id" OtherKey="id_przedmiotu" Type="Pozycja_planu" />
+      <Association Name="Przedmiot_Przypisany_przedmiot" Member="Przypisany_przedmiots" ThisKey="id" OtherKey="id_przedmiotu" Type="Przypisany_przedmiot" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Przypisany_przedmiot" Member="Przypisany_przedmiots">
+    <Type Name="Przypisany_przedmiot">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_prowadźącego" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="id_przedmiotu" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="rodzaj_zajęć" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="ilość_zajęć" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Prowadzący_Przypisany_przedmiot" Member="Prowadzący" ThisKey="id_prowadźącego" OtherKey="id" Type="Prowadzący" IsForeignKey="true" />
+      <Association Name="Przedmiot_Przypisany_przedmiot" Member="Przedmiot" ThisKey="id_przedmiotu" OtherKey="id" Type="Przedmiot" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sala" Member="Salas">
+    <Type Name="Sala">
+      <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="nazwa" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="typ" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="miejsca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Sala_Pozycja_planu" Member="Pozycja_planus" ThisKey="id" OtherKey="id_sali" Type="Pozycja_planu" />
+    </Type>
+  </Table>
+</Database>
