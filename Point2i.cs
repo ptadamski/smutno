@@ -49,14 +49,11 @@ namespace GeneticAlgorithm
 
         public int CompareTo(Point2i other)
         {
-            if (x == other.x && y == other.y)
-                return 0;
-            else if (x > other.x && y > other.y)
+			if (x > other.x && y > other.y)
                 return 1;
-            else if (x < other.x && y < other.y)
+			if (x < other.x && y < other.y)
                 return -1;
-            else
-                return 0;
+			return 0;
         }
 
         public Point2i Add(Point2i other)
