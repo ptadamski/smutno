@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GeneticAlgorithm
 {              
@@ -63,25 +65,59 @@ namespace GeneticAlgorithm
                 throw new Exception("NullOrEmpty Fitness");
 
             var min = fitnessFactors.Min();
+            var max = fitnessFactors.Max();
+            var dist = Math.Abs(max - min);
 
-            var constant = 1.0f / (population.Count * population.Count);               
-            var distribution = fitnessFactors.Select(x => x - min + constant).ToList(); 
-            var overall = distribution.Sum();
-            var boundry = distribution.Select(x => x / overall).ToList();
+            var uniformDistribuation = fitnessFactors.Select(x => 1.0f / (population.Count*population.Count)).ToList();                 
+            var shiftedDistribuation = fitnessFactors.Select(x => x - min).ToList(); 
+
+            var mixedDistribuation = new float[fitnessFactors.Count];
+
+            for (int i = 0; i < mixedDistribuation.Length; i++)
+                mixedDistribuation[i] = uniformDistribuation[i] + shiftedDistribuation[i];
+
+            //mixedDistribuation = mixedDistribuation.OrderBy(x => x).ToArray();
+
+            var overall = mixedDistribuation.Sum();
+
+            //komentarz
+            //problem: co gdy mamy rozklad jednostajny? (wowczas min=max oraz overal = 0, dist = 0)
+            //problem: co gdy mamy rozklad niemal jednostajny z 1 dominujacym chromosomem?
+            //rozwiazanie: lekko zmodyfikowana ruletka. Kazdy osobnik ma na poczatku taka sama szanse na sukces.
+            //nastepnie jego sukces modyfikowany jest przez ocene tego  osobnika
+            //rozklad jednostajny powinien miec male znaczenie i stanowic korekte
+
+
+            selectedPopulation = new List<Individual>();
+
+            //sort & normalize
+            //IDictionary<float, Field> populationAndFitness = new SortedDictionary<float, Field>();
+            //for (int i = 0; i < population.Count; i++)
+            //    populationAndFitness.Add((fitnessFactors[i % fitnessFactors.Count] - min) / overall, population[i % population.Count]);
+
+            var boundry = new List<KeyValuePair<float, Individual>>();
             var cumulative = new SortedList<Range<float>, Individual>();
-			
+
+            //for (int i = 0; i < population.Count; i++)
+            //    populationAndFitness.Add(new KeyValuePair<float, Field>((fitnessFactors[i % fitnessFactors.Count]) / overall, population[i % population.Count]));
+
+
+            for (int i = 0; i < mixedDistribuation.Length; i++)
+                boundry.Add(new KeyValuePair<float, Individual>(mixedDistribuation[i] / overall, population[i]));
+
+            //populationAndFitness.Sort((x, y) => x.Key.CompareTo(y.Key));
+
+
             //cumulative curve
             float lowerSum = 0.0f, upperSum = 0.0f;
             for (int i = 0; i < boundry.Count; i++)
             {
                 lowerSum = upperSum;
-                upperSum += boundry[i];
+                upperSum += boundry[i].Key;
                 var range = new Range<float>(lowerSum, upperSum);
-                cumulative.Add(range, population[i]);
+                cumulative.Add(range, boundry[i].Value);
             }
 
-            selectedPopulation = new List<Individual>();
-			
             //random selection
             var randRange = new Range<float>(0.0f,0.0f);
             for (int i = 0; i < populationLimit; i++)

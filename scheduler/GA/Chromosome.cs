@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GeneticAlgorithm
 {
     public class Chromosome<_Locus, _Gen> : IChromosome<_Locus, _Gen>
         where _Locus : Algebra.IArithmetic<_Locus>
-    {                                                          
-        private static Random genotypeRandom = new Random();
-        static private IList<_Gen> genotype = new List<_Gen>();  
-        private IDictionary<_Locus,_Gen> sequence = new Dictionary<_Locus,_Gen>();		
+    {
+        static private IList<_Gen> genotype = new List<_Gen>();
 
         static public IList<_Gen> Genotype
         {
@@ -21,7 +21,7 @@ namespace GeneticAlgorithm
         {
         }
 
-        public Chromosome(IList<_Locus> loci, IList<_Gen> gens)
+        public Chromosome(IList<_Gen> gens, IList<_Locus> loci)
         {
             this.Concatenate(loci, gens);
         }
@@ -29,7 +29,7 @@ namespace GeneticAlgorithm
         public Chromosome(IList<_Locus> loci, _Gen initializer)
         {
             this.Populate(loci, initializer);
-        }      
+        }                                                   
 
         public void Concatenate(IChromosome<_Locus, _Gen> chromosome)
         {
@@ -105,10 +105,10 @@ namespace GeneticAlgorithm
             foreach (var loc in loci)
                 sequence.Remove(loc);
 
-            chromosome = new Chromosome<_Locus, _Gen>(loci, gens);
+            chromosome = new Chromosome<_Locus, _Gen>(gens, loci);
         }
 
-        public void Cut(_Locus locus)
+        public void Cut(_Locus locus) 
         {     
             IList<_Gen> gens = new List<_Gen>();
             IList<_Locus> loci = new List<_Locus>();
@@ -160,12 +160,14 @@ namespace GeneticAlgorithm
 
         }
 
-        public void Randomize()
+        public void Randomize() 
         {
             //sequence.Clear();
             var items = sequence.ToList();
-            for (int i = 0, length = sequence.Count; i < length; i++)
+            for (int i = 0, length = items.Count; i < length; i++)
+            {
                 sequence[items[i].Key] = genotype[genotypeRandom.Next(genotype.Count)];
+            }
         }
                
         public object Clone()
@@ -196,17 +198,16 @@ namespace GeneticAlgorithm
         //    return sequence.GetEnumerator();
         //}
 
-        public void Mix(ICollection<_Locus> loci, IList<IChromosome<_Locus, _Gen>> genePool, IList<int> indices)
+        public void Mix(ICollection<_Locus> loci, IList<IChromosome<_Locus, _Gen>> genePool, IList<int> indices) 
         {
             sequence.Clear();
 
             int i = 0;
-			//for(int i=0; i<loci.Count; ++i)
             foreach (var locus in loci)
             {               
                 var index = indices[i % indices.Count] % genePool.Count;
                 sequence.Add(locus, genePool[index][locus]);
-                //i++;
+                i++;
             }
         }
 
@@ -217,5 +218,8 @@ namespace GeneticAlgorithm
             get { return sequence[index]; }
             set { sequence[index] = value; }
         }
+
+        private static Random genotypeRandom = new Random();
+        private IDictionary<_Locus,_Gen> sequence = new Dictionary<_Locus,_Gen>();
     }
 }

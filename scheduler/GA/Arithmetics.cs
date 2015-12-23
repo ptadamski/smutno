@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Algebra
 {
-    public interface IArithmetic<T> : IEquatable<T>, IComparable<T>
+    public interface IArithmetic<T> :  IComparable<T>
     {
         T Add(T other);
         T Sub(T other);

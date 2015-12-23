@@ -64,14 +64,7 @@
     <Compile Include="GA\Generator.cs" />
     <Compile Include="GA\GeneticAlgorithm.cs" />
     <Compile Include="GA\Individual.cs" />
-    <Compile Include="GA\interfaces\IChromosome.cs" />
-    <Compile Include="GA\interfaces\IFactory.cs" />
-    <Compile Include="GA\interfaces\IFitnessFunc.cs" />
-    <Compile Include="GA\interfaces\IGeneticAlgorithm.cs" />
-    <Compile Include="GA\interfaces\IIndividual.cs" />
-    <Compile Include="GA\interfaces\Individual.cs" />
-    <Compile Include="GA\interfaces\IReproducer.cs" />
-    <Compile Include="GA\interfaces\ISelector.cs" />
+    <Compile Include="GA\Interfaces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GA\Reproducer.cs" />

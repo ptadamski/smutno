@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+//using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GeneticAlgorithm
 {
-    public class GA<_Individual, _Chromosome, _Locus, _Gen> : IGeneticAlgorithm<_Individual>   
+    public class GA<_Individual,_Locus,_Gen> : IGeneticAlgorithm<_Individual>
+        where _Individual : IIndividual<IChromosome<_Locus,_Gen>>
         where _Locus : Algebra.IArithmetic<_Locus>
-        where _Chromosome : IChromosome<_Locus, _Gen>
-        where _Individual : IIndividual<_Chromosome>
     {
         public GA(IList<_Individual> population, IReproducer<_Individual> reproducer,
             ISelector<_Individual> selector, IFitnessFunc<_Individual> fitness, int selectionLimit)
@@ -31,17 +33,20 @@ namespace GeneticAlgorithm
 
         public IList<_Individual> Population { get { return population; } }
 
-        public bool Iterate(Func<bool> force)
+        public bool Iterate(Func<bool> forceExitFunc)
         {
             IList<float> fitnessFactors = new List<float>();
             IList<_Individual> part = new List<_Individual>();
 
+            //float fitnessOverall = 0.0f;
+
             stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
-            while (!stop || force())
+            var force = forceExitFunc();
+            if (!stop || force)
             {
                 Select(population, fitnessFactors, out part);
                 Populate(part, population.Count, out population);
-				stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
+                stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
             }
 
             return !stop; 
@@ -53,9 +58,7 @@ namespace GeneticAlgorithm
             foreach (var individual in population)
                 fitnessFactors.Add(fitness.Fit(individual));
 
-            //return fitnessFactors.Avarage() ?? 0;
-			
-			fitnessOverall=0.0f;
+            fitnessOverall=0.0f;
             foreach (var fit in fitnessFactors)
                 fitnessOverall += fit;
             fitnessOverall /= fitnessFactors.Count;

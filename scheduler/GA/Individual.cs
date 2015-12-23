@@ -9,7 +9,7 @@ namespace GeneticAlgorithm
     public class Individual<_Locus, _Gen> : IIndividual<IChromosome<_Locus, _Gen>>
         where _Locus : Algebra.IArithmetic<_Locus>
     {
-        public Individual(IChromosome<_Locus, _Gen> chromosome)
+        public Individual(IChromosome<_Locus,_Gen> chromosome)
         {
             //this.mutateRate = mutateRate;
             this.chromosome = chromosome;
@@ -18,7 +18,7 @@ namespace GeneticAlgorithm
         public virtual object Clone()
         {
             var result = new Individual<_Locus, _Gen>(null);
-            result.chromosome = (IChromosome<_Locus, _Gen>)chromosome.Clone();
+            result.chromosome = (IChromosome<_Locus, _Gen>) chromosome.Clone();
             return result;
         }
 
@@ -28,7 +28,7 @@ namespace GeneticAlgorithm
             set { chromosome = value; }
         }
 
-        protected IChromosome<_Locus, _Gen> chromosome;
+        protected IChromosome<_Locus,_Gen> chromosome;
         //protected static Random mutateRandom = new Random();
         //protected double mutateRate;
     }
