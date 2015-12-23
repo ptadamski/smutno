@@ -6,8 +6,10 @@ namespace GeneticAlgorithm
 {
     public class Chromosome<_Locus, _Gen> : IChromosome<_Locus, _Gen>
         where _Locus : Algebra.IArithmetic<_Locus>
-    {
-        static private IList<_Gen> genotype = new List<_Gen>();
+    {                                                          
+        private static Random genotypeRandom = new Random();
+        static private IList<_Gen> genotype = new List<_Gen>();  
+        private IDictionary<_Locus,_Gen> sequence = new Dictionary<_Locus,_Gen>();		
 
         static public IList<_Gen> Genotype
         {
@@ -29,26 +31,38 @@ namespace GeneticAlgorithm
             this.Populate(loci, initializer);
         }      
 
-        private static Random genotypeRandom = new Random();
-        private IDictionary<_Locus,_Gen> sequence = new Dictionary<_Locus,_Gen>();		
-
-        public void Concatenate(IChromosome<_Locus, _Gen> chromosome) 
+        public void Concatenate(IChromosome<_Locus, _Gen> chromosome)
         {
-            _Locus maxLocus = sequence.FirstOrDefault().Key;
-			
-            foreach (var pair in sequence)
-                maxLocus = pair.Key.CompareTo(maxLocus) > 0 ? pair.Key : maxLocus;
 
+            if (sequence.Count == 0 && chromosome.Loci.Count == 0)
+                return;
 
-            foreach (var locus in chromosome.Loci)
+            if (sequence.Count > 0)
             {
-                try
+                _Locus maxLocus = sequence.FirstOrDefault().Key;
+                foreach (var pair in sequence)
+                    maxLocus = pair.Key.CompareTo(maxLocus) > 0 ? pair.Key : maxLocus;
+
+                foreach (var locus in chromosome.Loci)
                 {
-                    sequence[locus.Add(maxLocus)] = chromosome[locus];
+                    try
+                    {
+                        sequence[locus.Add(maxLocus)] = chromosome[locus];
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        sequence.Add(locus, chromosome[locus]);
+                    }
                 }
-                catch (KeyNotFoundException)
+
+            }
+            else
+            {
+                foreach (var locus in chromosome.Loci)
                 {
+
                     sequence.Add(locus, chromosome[locus]);
+
                 }
             }
         }
@@ -91,10 +105,10 @@ namespace GeneticAlgorithm
             foreach (var loc in loci)
                 sequence.Remove(loc);
 
-            chromosome = new Chromosome<_Locus, _Gen>(gens, loci);
+            chromosome = new Chromosome<_Locus, _Gen>(loci, gens);
         }
 
-        public void Cut(_Locus locus) 
+        public void Cut(_Locus locus)
         {     
             IList<_Gen> gens = new List<_Gen>();
             IList<_Locus> loci = new List<_Locus>();
@@ -146,11 +160,12 @@ namespace GeneticAlgorithm
 
         }
 
-        public void Randomize() 
+        public void Randomize()
         {
             //sequence.Clear();
-            foreach (var pair in sequence)
-                sequence[pair.Key] = genotype[genotypeRandom.Next(genotype.Count)];
+            var items = sequence.ToList();
+            for (int i = 0, length = sequence.Count; i < length; i++)
+                sequence[items[i].Key] = genotype[genotypeRandom.Next(genotype.Count)];
         }
                
         public object Clone()
@@ -181,16 +196,16 @@ namespace GeneticAlgorithm
         //    return sequence.GetEnumerator();
         //}
 
-        public void Mix(ICollection<_Locus> loci, IList<IChromosome<_Locus, _Gen>> genePool, IList<int> indices) 
+        public void Mix(ICollection<_Locus> loci, IList<IChromosome<_Locus, _Gen>> genePool, IList<int> indices)
         {
             sequence.Clear();
 
             int i = 0;
-			for(unsigned i=0; i<loci.Count; ++i)
-            //foreach (var locus in loci)
+			//for(int i=0; i<loci.Count; ++i)
+            foreach (var locus in loci)
             {               
                 var index = indices[i % indices.Count] % genePool.Count;
-                sequence.Add(loci[i], genePool[index][locus]);
+                sequence.Add(locus, genePool[index][locus]);
                 //i++;
             }
         }

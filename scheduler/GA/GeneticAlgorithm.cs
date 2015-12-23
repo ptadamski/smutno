@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace GeneticAlgorithm
 {
-    public class GA<_Individual,_Locus,_Gen> : IGeneticAlgorithm<_Individual>
-        where _Individual : IIndividual<IChromosome<_Locus,_Gen>>
+    public class GA<_Individual, _Chromosome, _Locus, _Gen> : IGeneticAlgorithm<_Individual>   
         where _Locus : Algebra.IArithmetic<_Locus>
+        where _Chromosome : IChromosome<_Locus, _Gen>
+        where _Individual : IIndividual<_Chromosome>
     {
         public GA(IList<_Individual> population, IReproducer<_Individual> reproducer,
             ISelector<_Individual> selector, IFitnessFunc<_Individual> fitness, int selectionLimit)
@@ -36,7 +37,7 @@ namespace GeneticAlgorithm
             IList<_Individual> part = new List<_Individual>();
 
             stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
-            if (!stop || force())
+            while (!stop || force())
             {
                 Select(population, fitnessFactors, out part);
                 Populate(part, population.Count, out population);

@@ -67,7 +67,7 @@ namespace GeneticAlgorithm
             var constant = 1.0f / (population.Count * population.Count);               
             var distribution = fitnessFactors.Select(x => x - min + constant).ToList(); 
             var overall = distribution.Sum();
-            var boundry = distribution.Select(x => x / overall);
+            var boundry = distribution.Select(x => x / overall).ToList();
             var cumulative = new SortedList<Range<float>, Individual>();
 			
             //cumulative curve

@@ -4,10 +4,12 @@ using System.Linq;
 
 namespace GeneticAlgorithm
 {
-    public class CrossOverReproducer<_Individual, _Locus, _Gen> : IReproducer<_Individual>
-        where _Individual : IIndividual<IChromosome<_Locus, _Gen>>
+    public class CrossOverReproducer<_Individual, _Chromosome, _Locus, _Gen> : IReproducer<_Individual>
+        where _Chromosome : IChromosome<_Locus, _Gen>
+        where _Individual : IIndividual<_Chromosome>
+
     {
-        public CrossOverReproducer(double mutationRate, IFactory<_Individual, _Locus> breeder, int locusCount)
+        public CrossOverReproducer(double mutationRate, IFactory<_Individual, _Chromosome> breeder, int locusCount)
         {
             this.mutationRate = mutationRate;
             this.breeder = breeder;
@@ -29,7 +31,7 @@ namespace GeneticAlgorithm
         private static Random mutationRandom = new Random();
         private static Random pairingRandom = new Random();
         private double mutationRate = 0.0;
-        private IFactory<_Individual, _Locus> breeder;
+        private IFactory<_Individual, _Chromosome> breeder;
         //private IFactory<IChromosome<Locus,Gen>> splicer;
         private Generator reproductionRandomizer;
         private Random reproductionRandom = new Random();
@@ -48,7 +50,7 @@ namespace GeneticAlgorithm
 
             children = new List<_Individual>();
 
-            var genePool = new List<IChromosome<_Locus, _Gen>>();
+            var genePool = new List<IChromosome<_Locus,_Gen>>();
             foreach (var parent in parents)
                 genePool.Add(parent.Chromosome);
 
@@ -66,7 +68,7 @@ namespace GeneticAlgorithm
                 child.Chromosome.Mix(loci, genePool, indices);
 
                 var childLoci = child.Chromosome.Loci.ToList();
-                foreach (var locus in loci)
+                foreach (var locus in childLoci)
                 {
                     if (mutationRandom.NextDouble() <= mutationRate)
                         child.Chromosome.Mutate(locus);

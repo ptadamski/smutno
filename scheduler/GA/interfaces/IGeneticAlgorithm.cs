@@ -5,7 +5,7 @@ namespace GeneticAlgorithm
 {
     public interface IGeneticAlgorithm<_Individual>
     {
-        bool Iterate(bool force = false);
+        bool Iterate(Func<bool> force);
         void Select(IList<_Individual> population, IList<float> fitnessFactors, 
             out IList<_Individual> selectedPopulation);
         void Populate(IList<_Individual> oldPopulation, int populationLimit, 
