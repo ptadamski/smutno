@@ -73,6 +73,9 @@
     <None Include="BazaDanych.dbml.layout">
       <DependentUpon>BazaDanych.dbml</DependentUpon>
     </None>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -33,7 +33,7 @@ namespace GeneticAlgorithm
 
         public IList<_Individual> Population { get { return population; } }
 
-        public bool Iterate(Func<bool> forceExitFunc)
+        public bool Iterate(Func<bool> forceExitFunc, bool temp)
         {
             IList<float> fitnessFactors = new List<float>();
             IList<_Individual> part = new List<_Individual>();
@@ -49,7 +49,7 @@ namespace GeneticAlgorithm
                 stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
             }
 
-            return !stop; 
+            return !stop && !temp; 
         }
 
         public bool Evaluate(IList<_Individual> population, out IList<float> fitnessFactors, out float fitnessOverall)
