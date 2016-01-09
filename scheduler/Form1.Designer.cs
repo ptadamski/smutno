@@ -31,8 +31,8 @@ namespace scheduler
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.stop = new System.Windows.Forms.Button();
             this.start = new System.Windows.Forms.Button();
             this.output = new System.Windows.Forms.RichTextBox();
@@ -48,18 +48,18 @@ namespace scheduler
             this.prowadzącyTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.ProwadzącyTableAdapter();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.restart = new System.Windows.Forms.Button();
             this.wykres = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.nazwaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.indeksDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rokDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.studentBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.update_1 = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.nazwaDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tytułDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.prowadzącyBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.update_2 = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.dataGridView3 = new System.Windows.Forms.DataGridView();
             this.nazwaDataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -83,9 +83,18 @@ namespace scheduler
             this.rodzajzajęćDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ilośćzajęćDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.przypisanyprzedmiotBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.Update = new System.Windows.Forms.Button();
             this.studentTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.StudentTableAdapter();
             this.salaTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.SalaTableAdapter();
             this.przypisany_przedmiotTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.Przypisany_przedmiotTableAdapter();
+            this.id_prowadźącego = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nazwaDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tytułDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.id_studenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nazwaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.indeksDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rokDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dtas_s383964DataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.przedmiotBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource)).BeginInit();
@@ -93,9 +102,17 @@ namespace scheduler
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wykres)).BeginInit();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.studentBindingSource)).BeginInit();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource1)).BeginInit();
             this.tabPage4.SuspendLayout();
@@ -107,6 +124,8 @@ namespace scheduler
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.przypisanyprzedmiotBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // stop
@@ -138,7 +157,6 @@ namespace scheduler
             this.output.Size = new System.Drawing.Size(259, 225);
             this.output.TabIndex = 2;
             this.output.Text = "";
-            this.output.TextChanged += new System.EventHandler(this.output_TextChanged);
             // 
             // progressBar1
             // 
@@ -162,7 +180,6 @@ namespace scheduler
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 5;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // label2
             // 
@@ -179,7 +196,6 @@ namespace scheduler
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 7;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // dtas_s383964DataSet1
             // 
@@ -216,6 +232,7 @@ namespace scheduler
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.restart);
             this.tabPage1.Controls.Add(this.wykres);
             this.tabPage1.Controls.Add(this.output);
             this.tabPage1.Controls.Add(this.label2);
@@ -233,12 +250,23 @@ namespace scheduler
             this.tabPage1.Text = "Program";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // restart
+            // 
+            this.restart.Location = new System.Drawing.Point(6, 237);
+            this.restart.Name = "restart";
+            this.restart.Size = new System.Drawing.Size(112, 28);
+            this.restart.TabIndex = 9;
+            this.restart.Text = "Restart";
+            this.restart.UseVisualStyleBackColor = true;
+            this.restart.Visible = false;
+            this.restart.Click += new System.EventHandler(this.restart_Click);
+            // 
             // wykres
             // 
-            chartArea2.Name = "Wykres";
-            this.wykres.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.wykres.Legends.Add(legend2);
+            chartArea1.Name = "Wykres";
+            this.wykres.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.wykres.Legends.Add(legend1);
             this.wykres.Location = new System.Drawing.Point(271, 61);
             this.wykres.Name = "wykres";
             this.wykres.Size = new System.Drawing.Size(333, 233);
@@ -247,100 +275,130 @@ namespace scheduler
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.dataGridView1);
+            this.tabPage2.Controls.Add(this.splitContainer2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(610, 302);
+            this.tabPage2.Size = new System.Drawing.Size(634, 322);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Studenci";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.dataGridView1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.update_1);
+            this.splitContainer2.Size = new System.Drawing.Size(628, 316);
+            this.splitContainer2.SplitterDistance = 276;
+            this.splitContainer2.TabIndex = 1;
             // 
             // dataGridView1
             // 
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.id_studenta,
             this.nazwaDataGridViewTextBoxColumn,
             this.indeksDataGridViewTextBoxColumn,
             this.rokDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.studentBindingSource;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(604, 296);
+            this.dataGridView1.Size = new System.Drawing.Size(628, 276);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // nazwaDataGridViewTextBoxColumn
-            // 
-            this.nazwaDataGridViewTextBoxColumn.DataPropertyName = "nazwa";
-            this.nazwaDataGridViewTextBoxColumn.HeaderText = "nazwa";
-            this.nazwaDataGridViewTextBoxColumn.Name = "nazwaDataGridViewTextBoxColumn";
-            // 
-            // indeksDataGridViewTextBoxColumn
-            // 
-            this.indeksDataGridViewTextBoxColumn.DataPropertyName = "indeks";
-            this.indeksDataGridViewTextBoxColumn.HeaderText = "indeks";
-            this.indeksDataGridViewTextBoxColumn.Name = "indeksDataGridViewTextBoxColumn";
-            // 
-            // rokDataGridViewTextBoxColumn
-            // 
-            this.rokDataGridViewTextBoxColumn.DataPropertyName = "rok";
-            this.rokDataGridViewTextBoxColumn.HeaderText = "rok";
-            this.rokDataGridViewTextBoxColumn.Name = "rokDataGridViewTextBoxColumn";
+            this.dataGridView1.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView1_DefaultValuesNeeded);
             // 
             // studentBindingSource
             // 
             this.studentBindingSource.DataMember = "Student";
             this.studentBindingSource.DataSource = this.dtas_s383964DataSet1;
             // 
+            // update_1
+            // 
+            this.update_1.Location = new System.Drawing.Point(513, 2);
+            this.update_1.Name = "update_1";
+            this.update_1.Size = new System.Drawing.Size(112, 28);
+            this.update_1.TabIndex = 10;
+            this.update_1.Text = "Update";
+            this.update_1.UseVisualStyleBackColor = true;
+            this.update_1.Click += new System.EventHandler(this.update1_Click);
+            // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.dataGridView2);
+            this.tabPage3.Controls.Add(this.splitContainer3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(610, 302);
+            this.tabPage3.Size = new System.Drawing.Size(634, 322);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Prowadźący";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.dataGridView2);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.update_2);
+            this.splitContainer3.Size = new System.Drawing.Size(634, 322);
+            this.splitContainer3.SplitterDistance = 281;
+            this.splitContainer3.TabIndex = 1;
             // 
             // dataGridView2
             // 
             this.dataGridView2.AutoGenerateColumns = false;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.id_prowadźącego,
             this.nazwaDataGridViewTextBoxColumn1,
             this.tytułDataGridViewTextBoxColumn});
             this.dataGridView2.DataSource = this.prowadzącyBindingSource1;
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView2.Location = new System.Drawing.Point(0, 0);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(610, 302);
+            this.dataGridView2.Size = new System.Drawing.Size(634, 281);
             this.dataGridView2.TabIndex = 0;
-            // 
-            // nazwaDataGridViewTextBoxColumn1
-            // 
-            this.nazwaDataGridViewTextBoxColumn1.DataPropertyName = "nazwa";
-            this.nazwaDataGridViewTextBoxColumn1.HeaderText = "nazwav";
-            this.nazwaDataGridViewTextBoxColumn1.Name = "nazwaDataGridViewTextBoxColumn1";
-            // 
-            // tytułDataGridViewTextBoxColumn
-            // 
-            this.tytułDataGridViewTextBoxColumn.DataPropertyName = "tytuł";
-            this.tytułDataGridViewTextBoxColumn.HeaderText = "tytuł";
-            this.tytułDataGridViewTextBoxColumn.Name = "tytułDataGridViewTextBoxColumn";
+            this.dataGridView2.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView2_DefaultValuesNeeded);
             // 
             // prowadzącyBindingSource1
             // 
             this.prowadzącyBindingSource1.DataMember = "Prowadzący";
             this.prowadzącyBindingSource1.DataSource = this.dtas_s383964DataSet1;
             // 
+            // update_2
+            // 
+            this.update_2.Location = new System.Drawing.Point(519, 2);
+            this.update_2.Name = "update_2";
+            this.update_2.Size = new System.Drawing.Size(112, 28);
+            this.update_2.TabIndex = 11;
+            this.update_2.Text = "Update";
+            this.update_2.UseVisualStyleBackColor = true;
+            this.update_2.Click += new System.EventHandler(this.update2_Click);
+            // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.dataGridView3);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(610, 302);
+            this.tabPage4.Size = new System.Drawing.Size(634, 322);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Przedmioty";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -361,7 +419,7 @@ namespace scheduler
             this.dataGridView3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView3.Location = new System.Drawing.Point(0, 0);
             this.dataGridView3.Name = "dataGridView3";
-            this.dataGridView3.Size = new System.Drawing.Size(610, 302);
+            this.dataGridView3.Size = new System.Drawing.Size(634, 322);
             this.dataGridView3.TabIndex = 0;
             // 
             // nazwaDataGridViewTextBoxColumn2
@@ -416,7 +474,7 @@ namespace scheduler
             this.tabPage5.Controls.Add(this.dataGridView4);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(610, 302);
+            this.tabPage5.Size = new System.Drawing.Size(634, 322);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Sale";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -433,7 +491,7 @@ namespace scheduler
             this.dataGridView4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView4.Location = new System.Drawing.Point(0, 0);
             this.dataGridView4.Name = "dataGridView4";
-            this.dataGridView4.Size = new System.Drawing.Size(610, 302);
+            this.dataGridView4.Size = new System.Drawing.Size(634, 322);
             this.dataGridView4.TabIndex = 0;
             // 
             // nazwaDataGridViewTextBoxColumn3
@@ -465,7 +523,7 @@ namespace scheduler
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(610, 302);
+            this.tabPage6.Size = new System.Drawing.Size(634, 322);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Przypisania przedmiotów";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -483,7 +541,7 @@ namespace scheduler
             this.dataGridView5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView5.Location = new System.Drawing.Point(3, 3);
             this.dataGridView5.Name = "dataGridView5";
-            this.dataGridView5.Size = new System.Drawing.Size(604, 296);
+            this.dataGridView5.Size = new System.Drawing.Size(628, 316);
             this.dataGridView5.TabIndex = 0;
             // 
             // idprowadźącegoDataGridViewTextBoxColumn
@@ -515,6 +573,20 @@ namespace scheduler
             this.przypisanyprzedmiotBindingSource.DataMember = "Przypisany_przedmiot";
             this.przypisanyprzedmiotBindingSource.DataSource = this.dtas_s383964DataSet1;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Size = new System.Drawing.Size(150, 100);
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // Update
+            // 
+            this.Update.Location = new System.Drawing.Point(0, 0);
+            this.Update.Name = "Update";
+            this.Update.Size = new System.Drawing.Size(75, 23);
+            this.Update.TabIndex = 0;
+            // 
             // studentTableAdapter
             // 
             this.studentTableAdapter.ClearBeforeFill = true;
@@ -526,6 +598,49 @@ namespace scheduler
             // przypisany_przedmiotTableAdapter
             // 
             this.przypisany_przedmiotTableAdapter.ClearBeforeFill = true;
+            // 
+            // id_prowadźącego
+            // 
+            this.id_prowadźącego.DataPropertyName = "id";
+            this.id_prowadźącego.HeaderText = "id";
+            this.id_prowadźącego.Name = "id_prowadźącego";
+            // 
+            // nazwaDataGridViewTextBoxColumn1
+            // 
+            this.nazwaDataGridViewTextBoxColumn1.DataPropertyName = "nazwa";
+            this.nazwaDataGridViewTextBoxColumn1.HeaderText = "nazwa";
+            this.nazwaDataGridViewTextBoxColumn1.Name = "nazwaDataGridViewTextBoxColumn1";
+            // 
+            // tytułDataGridViewTextBoxColumn
+            // 
+            this.tytułDataGridViewTextBoxColumn.DataPropertyName = "tytuł";
+            this.tytułDataGridViewTextBoxColumn.HeaderText = "tytuł";
+            this.tytułDataGridViewTextBoxColumn.Name = "tytułDataGridViewTextBoxColumn";
+            // 
+            // id_studenta
+            // 
+            this.id_studenta.DataPropertyName = "id";
+            this.id_studenta.HeaderText = "id";
+            this.id_studenta.Name = "id_studenta";
+            this.id_studenta.Visible = false;
+            // 
+            // nazwaDataGridViewTextBoxColumn
+            // 
+            this.nazwaDataGridViewTextBoxColumn.DataPropertyName = "nazwa";
+            this.nazwaDataGridViewTextBoxColumn.HeaderText = "nazwa";
+            this.nazwaDataGridViewTextBoxColumn.Name = "nazwaDataGridViewTextBoxColumn";
+            // 
+            // indeksDataGridViewTextBoxColumn
+            // 
+            this.indeksDataGridViewTextBoxColumn.DataPropertyName = "indeks";
+            this.indeksDataGridViewTextBoxColumn.HeaderText = "indeks";
+            this.indeksDataGridViewTextBoxColumn.Name = "indeksDataGridViewTextBoxColumn";
+            // 
+            // rokDataGridViewTextBoxColumn
+            // 
+            this.rokDataGridViewTextBoxColumn.DataPropertyName = "rok";
+            this.rokDataGridViewTextBoxColumn.HeaderText = "rok";
+            this.rokDataGridViewTextBoxColumn.Name = "rokDataGridViewTextBoxColumn";
             // 
             // Form1
             // 
@@ -544,9 +659,17 @@ namespace scheduler
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wykres)).EndInit();
             this.tabPage2.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.studentBindingSource)).EndInit();
             this.tabPage3.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource1)).EndInit();
             this.tabPage4.ResumeLayout(false);
@@ -558,6 +681,8 @@ namespace scheduler
             this.tabPage6.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.przypisanyprzedmiotBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -580,18 +705,12 @@ namespace scheduler
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.BindingSource studentBindingSource;
         private dtas_s383964DataSetTableAdapters.StudentTableAdapter studentTableAdapter;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nazwaDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn indeksDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn rokDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nazwaDataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn tytułDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource prowadzącyBindingSource1;
         private System.Windows.Forms.DataGridView dataGridView3;
         private System.Windows.Forms.DataGridViewTextBoxColumn nazwaDataGridViewTextBoxColumn2;
@@ -617,6 +736,21 @@ namespace scheduler
         private System.Windows.Forms.DataGridViewTextBoxColumn rodzajzajęćDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ilośćzajęćDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataVisualization.Charting.Chart wykres;
+        private System.Windows.Forms.Button restart;
+        private System.Windows.Forms.Button Update;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Button update_1;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.Button update_2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_studenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nazwaDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn indeksDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rokDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id_prowadźącego;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nazwaDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tytułDataGridViewTextBoxColumn;
     }
 }
 
