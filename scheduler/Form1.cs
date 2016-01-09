@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using GeneticAlgorithm;
 
 namespace scheduler
@@ -14,7 +15,6 @@ namespace scheduler
     public partial class Form1 : Form
     {
         public bool temp = false;
-        public bool temp2 = false;
 
         public Form1()
         {
@@ -23,10 +23,19 @@ namespace scheduler
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Przypisany_przedmiot' table. You can move, or remove it, as needed.
+            this.przypisany_przedmiotTableAdapter.Fill(this.dtas_s383964DataSet1.Przypisany_przedmiot);
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Sala' table. You can move, or remove it, as needed.
+            this.salaTableAdapter.Fill(this.dtas_s383964DataSet1.Sala);
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Student' table. You can move, or remove it, as needed.
+            this.studentTableAdapter.Fill(this.dtas_s383964DataSet1.Student);
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Prowadzący' table. You can move, or remove it, as needed.
+            this.prowadzącyTableAdapter.Fill(this.dtas_s383964DataSet1.Prowadzący);
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Przedmiot' table. You can move, or remove it, as needed.
+            this.przedmiotTableAdapter.Fill(this.dtas_s383964DataSet1.Przedmiot);           
         }
 
-        private void exit_Click(object sender, EventArgs e)
+        private void stop_Click(object sender, EventArgs e)
         {
             temp = true;  
         }
@@ -34,6 +43,15 @@ namespace scheduler
         private void start_Click(object sender, EventArgs e)
         {
             this.output.Focus();
+
+            var series = new System.Windows.Forms.DataVisualization.Charting.Series
+            {
+                Name = "Series",
+                Color = System.Drawing.Color.Green,
+                ChartType = SeriesChartType.Line,
+                IsVisibleInLegend = false
+            };
+            this.wykres.Series.Add(series);
 
             MyChromosome.Genotype = "qwertyuiopasdfghjklzxcvbnm ".ToList();
             MyChromosome primeChromosome = new MyChromosome();
@@ -52,20 +70,19 @@ namespace scheduler
 
             GA<MyIndividual, MyInt, char> ga = new GA<MyIndividual, MyInt, char>(population, reproducer, selector, fitness, 20);
             int it = 0;
-            Console.WriteLine("zaczawszy");
-            this.output.AppendText("zaczawszy\n");
+            this.output.AppendText("START\n");
             while (ga.Iterate(() =>
             {
                 Application.DoEvents();
 
-                Console.WriteLine(" iteracja nr {0} ", it++);
-                this.output.AppendText(" iteracja nr " + it + "\n");
-                
+                if (it % 10 == 0) series.Points.AddXY(it, 100);
+                this.output.AppendText(" iteracja nr " + it++ + " - ");
+                          
                 foreach (var locus in ga.Population[0].Chromosome.Loci)
                 {
-                    Console.Write("{0}", ga.Population[0].Chromosome[locus]);
+                    this.output.AppendText("" + ga.Population[0].Chromosome[locus]);
                 }
-                Console.WriteLine();
+                this.output.AppendText("\n");
 
                 return true;
             }, temp));
@@ -76,16 +93,41 @@ namespace scheduler
                 {
                     foreach (var locus in item.Chromosome.Loci)
                     {
-                        Console.Write("{0}", item.Chromosome[locus]);
+                        this.output.AppendText("" + item.Chromosome[locus]);
 
                     }
-                    Console.WriteLine();
+                    this.output.AppendText("\n");
                 }
             }
 
-            Console.WriteLine(MyChromosome.Genotype);
+             this.output.AppendText("" + MyChromosome.Genotype);
             
             if (temp) Application.Exit();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void toolStripTextBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void output_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
