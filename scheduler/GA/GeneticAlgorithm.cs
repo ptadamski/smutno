@@ -33,23 +33,26 @@ namespace GeneticAlgorithm
 
         public IList<_Individual> Population { get { return population; } }
 
-        public bool Iterate(Func<bool> forceExitFunc, bool temp)
+        public bool Iterate(Func<bool> forceExitFunc, bool stop_button)
         {
-            IList<float> fitnessFactors = new List<float>();
-            IList<_Individual> part = new List<_Individual>();
-
-            //float fitnessOverall = 0.0f;
-
-            stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
-            var force = forceExitFunc();
-            if (!stop || force)
+            if (!stop_button)
             {
-                Select(population, fitnessFactors, out part);
-                Populate(part, population.Count, out population);
-                stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
-            }
+                IList<float> fitnessFactors = new List<float>();
+                IList<_Individual> part = new List<_Individual>();
 
-            return !stop && !temp; 
+                //float fitnessOverall = 0.0f;
+
+                stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
+                var force = forceExitFunc();
+                if (!stop || force)
+                {
+                    Select(population, fitnessFactors, out part);
+                    Populate(part, population.Count, out population);
+                    stop = Evaluate(population, out fitnessFactors, out fitnessOverall);
+                }
+            }           
+
+            return !stop && !stop_button; 
         }
 
         public bool Evaluate(IList<_Individual> population, out IList<float> fitnessFactors, out float fitnessOverall)

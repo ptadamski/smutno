@@ -1727,6 +1727,8 @@ namespace scheduler {
             
             private global::System.Data.DataColumn columnrok;
             
+            private global::System.Data.DataColumn columnkierunek;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public StudentDataTable() {
@@ -1802,6 +1804,14 @@ namespace scheduler {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn kierunekColumn {
+                get {
+                    return this.columnkierunek;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -1837,14 +1847,15 @@ namespace scheduler {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentRow AddStudentRow(System.Guid id, string nazwa, string indeks, System.Guid id_grupy, int rok) {
+            public StudentRow AddStudentRow(System.Guid id, string nazwa, string indeks, System.Guid id_grupy, int rok, string kierunek) {
                 StudentRow rowStudentRow = ((StudentRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         id,
                         nazwa,
                         indeks,
                         id_grupy,
-                        rok};
+                        rok,
+                        kierunek};
                 rowStudentRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowStudentRow);
                 return rowStudentRow;
@@ -1879,6 +1890,7 @@ namespace scheduler {
                 this.columnindeks = base.Columns["indeks"];
                 this.columnid_grupy = base.Columns["id_grupy"];
                 this.columnrok = base.Columns["rok"];
+                this.columnkierunek = base.Columns["kierunek"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1894,6 +1906,8 @@ namespace scheduler {
                 base.Columns.Add(this.columnid_grupy);
                 this.columnrok = new global::System.Data.DataColumn("rok", typeof(int), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnrok);
+                this.columnkierunek = new global::System.Data.DataColumn("kierunek", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnkierunek);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnid}, true));
                 this.columnid.AllowDBNull = false;
@@ -1903,6 +1917,8 @@ namespace scheduler {
                 this.columnindeks.AllowDBNull = false;
                 this.columnindeks.MaxLength = 50;
                 this.columnrok.AllowDBNull = false;
+                this.columnkierunek.AllowDBNull = false;
+                this.columnkierunek.MaxLength = 50;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2458,6 +2474,17 @@ namespace scheduler {
                 }
                 set {
                     this[this.tableStudent.rokColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string kierunek {
+                get {
+                    return ((string)(this[this.tableStudent.kierunekColumn]));
+                }
+                set {
+                    this[this.tableStudent.kierunekColumn] = value;
                 }
             }
             
@@ -4287,12 +4314,11 @@ SELECT id, nazwa, typ, miejsca FROM Sala WHERE (id = @id)";
             tableMapping.ColumnMappings.Add("indeks", "indeks");
             tableMapping.ColumnMappings.Add("id_grupy", "id_grupy");
             tableMapping.ColumnMappings.Add("rok", "rok");
+            tableMapping.ColumnMappings.Add("kierunek", "kierunek");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[Student] WHERE (([id] = @Original_id) AND ([nazwa] = @Original" +
-                "_nazwa) AND ([indeks] = @Original_indeks) AND ((@IsNull_id_grupy = 1 AND [id_gru" +
-                "py] IS NULL) OR ([id_grupy] = @Original_id_grupy)) AND ([rok] = @Original_rok))";
+            this._adapter.DeleteCommand.CommandText = @"DELETE FROM [Student] WHERE (([id] = @Original_id) AND ([nazwa] = @Original_nazwa) AND ([indeks] = @Original_indeks) AND ((@IsNull_id_grupy = 1 AND [id_grupy] IS NULL) OR ([id_grupy] = @Original_id_grupy)) AND ([rok] = @Original_rok) AND ([kierunek] = @Original_kierunek))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_id", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_nazwa", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nazwa", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
@@ -4300,33 +4326,37 @@ SELECT id, nazwa, typ, miejsca FROM Sala WHERE (id = @id)";
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_id_grupy", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_id_grupy", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_rok", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "rok", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_kierunek", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "kierunek", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[Student] ([id], [nazwa], [indeks], [id_grupy], [rok]) VALUES (" +
-                "@id, @nazwa, @indeks, @id_grupy, @rok);\r\nSELECT id, nazwa, indeks, id_grupy, rok" +
-                " FROM Student WHERE (id = @id)";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Student] ([id], [nazwa], [indeks], [id_grupy], [rok], [kierunek]) VA" +
+                "LUES (@id, @nazwa, @indeks, @id_grupy, @rok, @kierunek);\r\nSELECT id, nazwa, inde" +
+                "ks, id_grupy, rok, kierunek FROM Student WHERE (id = @id)";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@nazwa", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nazwa", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@indeks", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "indeks", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id_grupy", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@rok", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "rok", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@kierunek", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "kierunek", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[Student] SET [id] = @id, [nazwa] = @nazwa, [indeks] = @indeks, [id_grupy] = @id_grupy, [rok] = @rok WHERE (([id] = @Original_id) AND ([nazwa] = @Original_nazwa) AND ([indeks] = @Original_indeks) AND ((@IsNull_id_grupy = 1 AND [id_grupy] IS NULL) OR ([id_grupy] = @Original_id_grupy)) AND ([rok] = @Original_rok));
-SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Student] SET [id] = @id, [nazwa] = @nazwa, [indeks] = @indeks, [id_grupy] = @id_grupy, [rok] = @rok, [kierunek] = @kierunek WHERE (([id] = @Original_id) AND ([nazwa] = @Original_nazwa) AND ([indeks] = @Original_indeks) AND ((@IsNull_id_grupy = 1 AND [id_grupy] IS NULL) OR ([id_grupy] = @Original_id_grupy)) AND ([rok] = @Original_rok) AND ([kierunek] = @Original_kierunek));
+SELECT id, nazwa, indeks, id_grupy, rok, kierunek FROM Student WHERE (id = @id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@nazwa", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nazwa", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@indeks", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "indeks", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@id_grupy", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@rok", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "rok", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@kierunek", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "kierunek", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_id", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_nazwa", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "nazwa", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_indeks", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "indeks", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@IsNull_id_grupy", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Original, true, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_id_grupy", global::System.Data.SqlDbType.UniqueIdentifier, 0, global::System.Data.ParameterDirection.Input, 0, 0, "id_grupy", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_rok", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "rok", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_kierunek", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "kierunek", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -4342,7 +4372,8 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
             this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT id, nazwa, indeks, id_grupy, rok FROM dbo.Student";
+            this._commandCollection[0].CommandText = "SELECT        id, nazwa, indeks, id_grupy, rok, kierunek\r\nFROM            Student" +
+                "";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
         }
         
@@ -4403,7 +4434,7 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok) {
+        public virtual int Delete(System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok, string Original_kierunek) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((System.Guid)(Original_id));
             if ((Original_nazwa == null)) {
                 throw new global::System.ArgumentNullException("Original_nazwa");
@@ -4426,6 +4457,12 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
                 this.Adapter.DeleteCommand.Parameters[4].Value = global::System.DBNull.Value;
             }
             this.Adapter.DeleteCommand.Parameters[5].Value = ((int)(Original_rok));
+            if ((Original_kierunek == null)) {
+                throw new global::System.ArgumentNullException("Original_kierunek");
+            }
+            else {
+                this.Adapter.DeleteCommand.Parameters[6].Value = ((string)(Original_kierunek));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -4446,7 +4483,7 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(System.Guid id, string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok) {
+        public virtual int Insert(System.Guid id, string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok, string kierunek) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((System.Guid)(id));
             if ((nazwa == null)) {
                 throw new global::System.ArgumentNullException("nazwa");
@@ -4467,6 +4504,12 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
                 this.Adapter.InsertCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
             this.Adapter.InsertCommand.Parameters[4].Value = ((int)(rok));
+            if ((kierunek == null)) {
+                throw new global::System.ArgumentNullException("kierunek");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(kierunek));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -4487,7 +4530,7 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(System.Guid id, string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok, System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok) {
+        public virtual int Update(System.Guid id, string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok, string kierunek, System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok, string Original_kierunek) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((System.Guid)(id));
             if ((nazwa == null)) {
                 throw new global::System.ArgumentNullException("nazwa");
@@ -4508,28 +4551,40 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
                 this.Adapter.UpdateCommand.Parameters[3].Value = global::System.DBNull.Value;
             }
             this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(rok));
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((System.Guid)(Original_id));
+            if ((kierunek == null)) {
+                throw new global::System.ArgumentNullException("kierunek");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(kierunek));
+            }
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((System.Guid)(Original_id));
             if ((Original_nazwa == null)) {
                 throw new global::System.ArgumentNullException("Original_nazwa");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[6].Value = ((string)(Original_nazwa));
+                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_nazwa));
             }
             if ((Original_indeks == null)) {
                 throw new global::System.ArgumentNullException("Original_indeks");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_indeks));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_indeks));
             }
             if ((Original_id_grupy.HasValue == true)) {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(0));
-                this.Adapter.UpdateCommand.Parameters[9].Value = ((System.Guid)(Original_id_grupy.Value));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(0));
+                this.Adapter.UpdateCommand.Parameters[10].Value = ((System.Guid)(Original_id_grupy.Value));
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((object)(1));
-                this.Adapter.UpdateCommand.Parameters[9].Value = global::System.DBNull.Value;
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((object)(1));
+                this.Adapter.UpdateCommand.Parameters[10].Value = global::System.DBNull.Value;
             }
-            this.Adapter.UpdateCommand.Parameters[10].Value = ((int)(Original_rok));
+            this.Adapter.UpdateCommand.Parameters[11].Value = ((int)(Original_rok));
+            if ((Original_kierunek == null)) {
+                throw new global::System.ArgumentNullException("Original_kierunek");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[12].Value = ((string)(Original_kierunek));
+            }
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -4550,8 +4605,8 @@ SELECT id, nazwa, indeks, id_grupy, rok FROM Student WHERE (id = @id)";
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok, System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok) {
-            return this.Update(Original_id, nazwa, indeks, id_grupy, rok, Original_id, Original_nazwa, Original_indeks, Original_id_grupy, Original_rok);
+        public virtual int Update(string nazwa, string indeks, global::System.Nullable<global::System.Guid> id_grupy, int rok, string kierunek, System.Guid Original_id, string Original_nazwa, string Original_indeks, global::System.Nullable<global::System.Guid> Original_id_grupy, int Original_rok, string Original_kierunek) {
+            return this.Update(Original_id, nazwa, indeks, id_grupy, rok, kierunek, Original_id, Original_nazwa, Original_indeks, Original_id_grupy, Original_rok, Original_kierunek);
         }
     }
     

@@ -38,6 +38,8 @@ namespace scheduler
             InitializeComponent();
             values_init();
             this.wykres.Series.Add(series);
+            this.comboBox1.SelectedItem = "zimowy";
+            Text = Application.ExecutablePath;
         }
 
         public void values_init()
@@ -59,6 +61,13 @@ namespace scheduler
 
             it = 0;
             ga = new GA<MyIndividual, MyInt, char>(population, reproducer, selector, fitness, 20);
+
+            this.comboBox1.Enabled = true;
+            this.dataGridView1.ReadOnly = false; this.dataGridView1.AllowUserToDeleteRows = true;
+            this.dataGridView2.ReadOnly = false; this.dataGridView2.AllowUserToDeleteRows = true;
+            this.dataGridView3.ReadOnly = false; this.dataGridView3.AllowUserToDeleteRows = true;
+            this.dataGridView4.ReadOnly = false; this.dataGridView4.AllowUserToDeleteRows = true;
+            this.dataGridView5.ReadOnly = false; this.dataGridView5.AllowUserToDeleteRows = true;
         }
 
         public void algorithm_loop()
@@ -70,15 +79,18 @@ namespace scheduler
             {
                 Application.DoEvents();
 
-                if (it % 10 == 0) series.Points.AddXY(it, 100);
-                this.output.AppendText(" iteracja nr " + it++ + " - ");
-
-                foreach (var locus in ga.Population[0].Chromosome.Loci)
+                if(!stop_button)
                 {
-                    this.output.AppendText("" + ga.Population[0].Chromosome[locus]);
-                }
-                this.output.AppendText("\n");
+                    if (it % 10 == 0) series.Points.AddXY(it, 100);
+                    this.output.AppendText(" iteracja nr " + it++ + " - ");                               
 
+                    foreach (var locus in ga.Population[0].Chromosome.Loci)
+                    {
+                        this.output.AppendText("" + ga.Population[0].Chromosome[locus]);
+                    }
+                    this.output.AppendText("\n");
+                }  
+             
                 return true;
             }, stop_button)) ;
 
@@ -97,8 +109,8 @@ namespace scheduler
 
             if (!stop_button)
             {
-                textBox1.ReadOnly = false;
-                textBox2.ReadOnly = false;
+                values_init();
+                stop_Click(null, null);
                 this.output.AppendText("" + MyChromosome.Genotype);
             } 
         }
@@ -118,6 +130,14 @@ namespace scheduler
 
             this.id_studenta.Visible = false;
             this.id_prowadźącego.Visible = false;
+            this.id_przedmiotu.Visible = false;
+            this.id_sali.Visible = false;
+            this.id_przypisania.Visible = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e) 
+        {
+            stop_Click(null, null);
         }
 
         private void stop_Click(object sender, EventArgs e)
@@ -133,20 +153,24 @@ namespace scheduler
         private void start_Click(object sender, EventArgs e)
         {                       
             if(stop_button) stop_button = false;
+            this.comboBox1.Enabled = false;
             this.start.Visible = false;
             this.restart.Visible = true;
-            textBox1.ReadOnly = true;
-            textBox2.ReadOnly = true;
+            this.textBox1.ReadOnly = true;
+            this.textBox2.ReadOnly = true;
+            this.dataGridView1.ReadOnly = true; this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView2.ReadOnly = true; this.dataGridView2.AllowUserToDeleteRows = false;
+            this.dataGridView3.ReadOnly = true; this.dataGridView3.AllowUserToDeleteRows = false;
+            this.dataGridView4.ReadOnly = true; this.dataGridView4.AllowUserToDeleteRows = false;
+            this.dataGridView5.ReadOnly = true; this.dataGridView5.AllowUserToDeleteRows = false;
             algorithm_loop();
         }
 
         private void restart_Click(object sender, EventArgs e)
         {
-            if (stop_button) stop_button = false;
             values_init();
             this.output.Clear();
             stop_Click(null,null);
-            algorithm_loop();
         }
 
         private void update1_Click(object sender, EventArgs e)
@@ -183,6 +207,60 @@ namespace scheduler
         void dataGridView2_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
         {
             e.Row.Cells["id_prowadźącego"].Value = Guid.NewGuid();
+        }
+
+        private void update3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.przedmiotTableAdapter.Update(dtas_s383964DataSet1);
+                this.przedmiotTableAdapter.Fill(this.dtas_s383964DataSet1.Przedmiot);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void dataGridView3_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells["id_przedmiotu"].Value = Guid.NewGuid();
+        }
+
+        private void update4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.salaTableAdapter.Update(dtas_s383964DataSet1);
+                this.salaTableAdapter.Fill(this.dtas_s383964DataSet1.Sala);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void dataGridView4_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells["id_sali"].Value = Guid.NewGuid();
+        }
+
+        private void update5_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.przypisany_przedmiotTableAdapter.Update(dtas_s383964DataSet1);
+                this.przypisany_przedmiotTableAdapter.Fill(this.dtas_s383964DataSet1.Przypisany_przedmiot);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        void dataGridView5_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells["id_przypisania"].Value = Guid.NewGuid();
         }
     }
 
