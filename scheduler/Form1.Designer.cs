@@ -388,7 +388,7 @@ namespace scheduler
             this.update_1.Name = "update_1";
             this.update_1.Size = new System.Drawing.Size(112, 28);
             this.update_1.TabIndex = 10;
-            this.update_1.Text = "Update";
+            this.update_1.Text = "Zaktualizuj";
             this.update_1.UseVisualStyleBackColor = true;
             this.update_1.Click += new System.EventHandler(this.update1_Click);
             // 
@@ -465,7 +465,7 @@ namespace scheduler
             this.update_2.Name = "update_2";
             this.update_2.Size = new System.Drawing.Size(112, 28);
             this.update_2.TabIndex = 11;
-            this.update_2.Text = "Update";
+            this.update_2.Text = "Zaktualizuj";
             this.update_2.UseVisualStyleBackColor = true;
             this.update_2.Click += new System.EventHandler(this.update2_Click);
             // 
@@ -577,7 +577,7 @@ namespace scheduler
             this.update_3.Name = "update_3";
             this.update_3.Size = new System.Drawing.Size(112, 28);
             this.update_3.TabIndex = 12;
-            this.update_3.Text = "Update";
+            this.update_3.Text = "Zaktualizuj";
             this.update_3.UseVisualStyleBackColor = true;
             this.update_3.Click += new System.EventHandler(this.update3_Click);
             // 
@@ -661,7 +661,7 @@ namespace scheduler
             this.update_4.Name = "update_4";
             this.update_4.Size = new System.Drawing.Size(112, 28);
             this.update_4.TabIndex = 12;
-            this.update_4.Text = "Update";
+            this.update_4.Text = "Zaktualizuj";
             this.update_4.UseVisualStyleBackColor = true;
             this.update_4.Click += new System.EventHandler(this.update4_Click);
             // 
@@ -723,7 +723,7 @@ namespace scheduler
             this.update_5.Name = "update_5";
             this.update_5.Size = new System.Drawing.Size(112, 28);
             this.update_5.TabIndex = 12;
-            this.update_5.Text = "Update";
+            this.update_5.Text = "Zaktualizuj";
             this.update_5.UseVisualStyleBackColor = true;
             this.update_5.Click += new System.EventHandler(this.update5_Click);
             // 
