@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace scheduler
 {
-    interface IRandomGenerator<_T>
+    public interface IRandomGenerator<_T>
     {
         _T Next();
         _T Next(_T hi);

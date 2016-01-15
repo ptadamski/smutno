@@ -78,17 +78,17 @@ namespace scheduler
             return result;
         }
 
-        public Timetable Mix(IDictionary<Pozycja, int> indices, IList<Timetable> parents)
+        public Timetable Mix(/*IDictionary<Pozycja, int> indices,*/ IList<Timetable> parents, IRandomGenerator<int> randomParent)
         {
-            Timetable result = this;
-            foreach (var index in indices.Keys)
-            {
-                if (_items.ContainsKey(index))
-                    result._items[index] = parents[indices[index]][index];
-                else
-                    result._items.Add(index, parents[indices[index]][index]);
-            }
-            return result;
+            //Timetable result = this;
+            //foreach (var index in indices.Keys)
+            //{
+            //    if (_items.ContainsKey(index))
+            //        result._items[index] = parents[indices[index]][index];
+            //    else
+            //        result._items.Add(index, parents[indices[index]][index]);
+            //}
+            return this;
         }
 
         public Zajecia this[Pozycja index]

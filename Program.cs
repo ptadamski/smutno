@@ -8,7 +8,7 @@ namespace scheduler
     static class Program
     {
         static void Main(string[] Args)
-        {                                    
+        {                                                  
             DoubleRandomGenerator randMutation = new DoubleRandomGenerator();
             DoubleRandomGenerator randSelector = new DoubleRandomGenerator();
             IntegerRandomGenerator randGen = new IntegerRandomGenerator();
@@ -45,15 +45,17 @@ namespace scheduler
                 }
                 Console.WriteLine();
 
-                return ga.Population.Select(x=> evalSelector.Evaluate(x)).Average() > 0.5;
+                return ga.Population.Select(x=> evalSelector.Evaluate(x)).Average() > 0.95;
 
             })) ;
             foreach (var item in ga.Population)
             {
                 if (fitness.Evaluate(item) > 0.0f)
                 {
+                    Console.Write("{0} ", evalSelector.Evaluate(item));
                     foreach (var locus in item.Loci)
                     {
+                        //Console.Write("{1} {0}", item[locus], evalSelector.Evaluate(item));
                         Console.Write("{0}", item[locus]);
 
                     }
@@ -83,7 +85,7 @@ namespace scheduler
             {
                 //randomly
                 var item = _args.Clone();
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < 35; i++)
                     _mutation.Mutate(item, i);
                 return _last = item;
             }
@@ -213,22 +215,14 @@ namespace scheduler
                 get { return _items.Values; }
             }
                           
-            public MyChromosome Mix(IDictionary<int, int> indices, IList<MyChromosome> parents)
+            public MyChromosome Mix(/*IDictionary<int, int> indices,*/ IList<MyChromosome> parents, IRandomGenerator<int> randomParent)
             {
-                var parentList = parents.ToList();
-
-                MyChromosome result = this;
-                _items.Clear();
-                foreach (var index in indices.Keys)
+                for (int i = 0; i < _items.Count; i++)
                 {
-                    if (_items.ContainsKey(index))
-                        _items[index] = parents[indices[index]][index];
-                    else
-                        _items.Add(index, parents[indices[index]][index]);
-                    _mutation.TryMutate(this, index);
-
+                    _items[i] = parents[randomParent.Next(parents.Count)][i];
+                    _mutation.TryMutate(this, i);
                 }
-                return result;
+                return this;
             }
 
             public IList<char> Genome
@@ -301,10 +295,10 @@ namespace scheduler
                 var chromosome = item;
                 for (int i = 0, length = chromosome.Loci.Count; i < length - 2; i++)
                 {
-                    if (chromosome[i] == 'a')
-                        if (chromosome[i+1] == 'l')
-                            if (chromosome[i+2] == 'a')
-                                result = 1.0f;
+                    if (chromosome[i] == 'a') result += 0.01f;
+                    if (chromosome[i + 1] == 'l') result += 0.01f;
+                    if (chromosome[i + 2] == 'a') result += 0.01f;
+                    if (chromosome[i] == 'a' && chromosome[i + 1] == 'l' && chromosome[i + 2] == 'a') result = 1.0f;
                 }
                 return result;
             }

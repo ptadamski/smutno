@@ -79,17 +79,18 @@ namespace scheduler
             return result;
         }
 
-        public Chromosome<_Locus, _Gen> Mix(IDictionary<_Locus, int> indices, IList<Chromosome<_Locus, _Gen>> parents)
+        public Chromosome<_Locus, _Gen> Mix(/*IDictionary<_Locus, int> indices,*/ IList<Chromosome<_Locus, _Gen>> parents, IRandomGenerator<int> randomParent)
         {
-            Chromosome<_Locus, _Gen> result = this.Clone();
-            foreach (var index in indices.Keys)
-            {
-                if (_items.ContainsKey(index))
-                    result._items[index] = parents[indices[index]][index];
-                else
-                    result._items.Add(index, parents[indices[index]][index]);
-            }
-            return result;
+            //Chromosome<_Locus, _Gen> result = this.Clone();
+            //foreach (var index in indices.Keys)
+            //{
+            //    if (_items.ContainsKey(index))
+            //        result._items[index] = parents[indices[index]][index];
+            //    else
+            //        result._items.Add(index, parents[indices[index]][index]);
+            //}
+            //return result;         
+            throw new NotImplementedException();
         }
 
         public ICollection<_Locus> Loci

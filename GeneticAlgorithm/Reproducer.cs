@@ -83,6 +83,8 @@ namespace scheduler
             }
         }
 
+
+
         public void Reproduce(out IList<_Chromosome> newPopulation, IList<_Chromosome> fromIndividuals, int uptoCount)
         {
             IDictionary<int, IList<_Chromosome>> mates;
@@ -96,15 +98,18 @@ namespace scheduler
             var keys = mates.Keys.ToList();
             for (int i = 0; i < uptoCount; i++)
             {                       
-                var randomMatingGroup = _randomMate.Next(keys.Count);
-                var chromosome = _chromosomeFactory.CreateNew(mates[keys[randomMatingGroup]].First());
+                var groupIndex = _randomMate.Next(keys.Count);
+                var chromosome = _chromosomeFactory.CreateNew(mates[keys[groupIndex]].First());
                 var indices = new Dictionary<_Locus, int>();
-                var randomMate = _randomMate.Next(mates[randomMatingGroup].Count);
+                
+                //dwa podejscia rzychodza mi do glowy : 
+                //-wypelniamy sloty nie unikatowymi genami
+                //-wypelniamy sloty unikatowymi genami
+                //mozna to zrealizowac poprzez lambde, delegata, albo przez zewnetrzna implementacje - ja chce zewnetrzna implementacje
+                //chce dostac ... zbior par (locus, index) czyli z ktorego rodzica bedzie brany gen na podanym locus
 
-                //kazdy rodzic moze miec inny zestaw miejsc na geny
-                //chromosom ma ograniczona liczbe miejsc ?   =>   trzeba wybrac wpierw rodzica, potem gen  na danej pozycji
-
-                chromosome.Mix(indices, mates[randomMatingGroup]);
+                //wniosek - niech Mix() w pelni decyduje tylko w oparciu o liste rodzicow!
+                chromosome.Mix(mates[keys[groupIndex]], _randomMate);
                 newPopulation.Add(chromosome);
             }
         }

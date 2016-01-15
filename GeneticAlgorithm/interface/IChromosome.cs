@@ -13,7 +13,7 @@ namespace scheduler
         _Implt Substract(_Implt other);
         _Implt[] Split(_Locus index);
         _Implt Clone();
-        _Implt Mix(IDictionary<_Locus, int> indices, IList<_Implt> parents);
+        _Implt Mix(/*IDictionary<_Locus, int> indices,*/ IList<_Implt> parents, IRandomGenerator<int> randomParent);
 
         _Gen this[_Locus index] { get; set; }
         ICollection<_Locus> Loci { get; }
