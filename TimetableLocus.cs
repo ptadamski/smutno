@@ -8,6 +8,18 @@ namespace scheduler
 {
     public class TimetableLocus
     {
+        private static int _maxTimeLength;
+        private static int _maxClassRooomCount;
+
+        public static int MaxTimeLength { get { return _maxTimeLength; } }
+        public static int MaxClassRoomCount { get { return _maxClassRooomCount; } }
+
+        public static void SetBoundry(int maxTimeLength, int maxClassRooomCount) 
+        {
+            _maxTimeLength=maxTimeLength  ;
+            _maxClassRooomCount = maxClassRooomCount;
+        }
+
         public TimetableLocus(int time, int classRoom)
         {
             _classRoom = classRoom;
@@ -19,7 +31,7 @@ namespace scheduler
         public int Time
         {
             get { return _time; }
-            set { _time = value; }
+            set { _time = value % _maxTimeLength; }
         }
 
         private int _classRoom;
@@ -27,7 +39,7 @@ namespace scheduler
         public int ClassRoom
         {
             get { return _classRoom; }
-            set { _classRoom = value; }
+            set { _classRoom = value % _maxClassRooomCount; }
         }   
     }
 }

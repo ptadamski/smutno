@@ -7,8 +7,14 @@ namespace scheduler
 {
     static class Program
     {
+        void Init(BazaDanychDataContext db, string semestr) 
+        {
+            var przedmioty = db.Przedmiots.Select(x=>x).Where(x=>x.semestr.Equals(semestr)).ToList();
+            //
+        }
+
         static void Main(string[] Args)
-        {                                                  
+        {                                                                               
             DoubleRandomGenerator randMutation = new DoubleRandomGenerator();
             DoubleRandomGenerator randSelector = new DoubleRandomGenerator();
             IntegerRandomGenerator randGen = new IntegerRandomGenerator();

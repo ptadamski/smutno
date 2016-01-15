@@ -92,6 +92,7 @@
     <Compile Include="Timetable.cs" />
     <Compile Include="TimetableFactory.cs" />
     <Compile Include="TimetableLocus.cs" />
+    <Compile Include="TimetableTeacherMutation.cs" />
     <Compile Include="Zajecia.cs" />
     <None Include="BazaDanych.dbml.layout">
       <DependentUpon>BazaDanych.dbml</DependentUpon>

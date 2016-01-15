@@ -9,7 +9,7 @@ namespace scheduler
         public override bool Equals(object x)
         {
             Zajecia obj = (Zajecia)x;
-            return Przedmiot.id == obj.Przedmiot.id && Prowadzacy.id == obj.Przedmiot.id && Grupa.id == obj.Grupa.id;
+            return Przedmiot.id == obj.Przedmiot.id  && Grupa.id == obj.Grupa.id;// && Prowadzacy.id == obj.Przedmiot.id;
         }
 
         public override int GetHashCode()

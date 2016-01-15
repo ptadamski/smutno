@@ -8,6 +8,11 @@ namespace scheduler
 {
     class TimetableFactory  : IFactory<Timetable, Timetable>
     {
+        public TimetableFactory()
+        {
+            _args = _last = new Timetable();
+        }
+
         public Timetable CreateNew(Timetable args)
         {
             return args.Clone();

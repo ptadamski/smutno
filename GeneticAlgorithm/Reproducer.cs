@@ -83,8 +83,6 @@ namespace scheduler
             }
         }
 
-
-
         public void Reproduce(out IList<_Chromosome> newPopulation, IList<_Chromosome> fromIndividuals, int uptoCount)
         {
             IDictionary<int, IList<_Chromosome>> mates;
