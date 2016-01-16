@@ -12,7 +12,7 @@ namespace scheduler.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -31,6 +31,17 @@ namespace scheduler.Properties {
         public string dtas_s383964ConnectionString {
             get {
                 return ((string)(this["dtas_s383964ConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=mssql.wmi.amu.edu.pl;Initial Catalog=dtas_s383964;Persist Security In" +
+            "fo=True;User ID=s383964;Password=674lCgcV")]
+        public string dtas_s383964ConnectionString1 {
+            get {
+                return ((string)(this["dtas_s383964ConnectionString1"]));
             }
         }
     }

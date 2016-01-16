@@ -33,15 +33,15 @@ namespace scheduler
     partial void InsertGrupa(Grupa instance);
     partial void UpdateGrupa(Grupa instance);
     partial void DeleteGrupa(Grupa instance);
-    partial void InsertStudent(Student instance);
-    partial void UpdateStudent(Student instance);
-    partial void DeleteStudent(Student instance);
     partial void InsertPozycja_planu(Pozycja_planu instance);
     partial void UpdatePozycja_planu(Pozycja_planu instance);
     partial void DeletePozycja_planu(Pozycja_planu instance);
-    partial void InsertProwadzacy(Prowadzacy instance);
-    partial void UpdateProwadzacy(Prowadzacy instance);
-    partial void DeleteProwadzacy(Prowadzacy instance);
+    partial void InsertProwadzący(Prowadzący instance);
+    partial void UpdateProwadzący(Prowadzący instance);
+    partial void DeleteProwadzący(Prowadzący instance);
+    partial void InsertStudent(Student instance);
+    partial void UpdateStudent(Student instance);
+    partial void DeleteStudent(Student instance);
     partial void InsertPrzedmiot(Przedmiot instance);
     partial void UpdatePrzedmiot(Przedmiot instance);
     partial void DeletePrzedmiot(Przedmiot instance);
@@ -54,7 +54,7 @@ namespace scheduler
     #endregion
 		
 		public BazaDanychDataContext() : 
-				base(global::scheduler.Properties.Settings.Default.dtas_s383964ConnectionString, mappingSource)
+				base(global::scheduler.Properties.Settings.Default.dtas_s383964ConnectionString1, mappingSource)
 		{
 			OnCreated();
 		}
@@ -91,14 +91,6 @@ namespace scheduler
 			}
 		}
 		
-		public System.Data.Linq.Table<Student> Students
-		{
-			get
-			{
-				return this.GetTable<Student>();
-			}
-		}
-		
 		public System.Data.Linq.Table<Pozycja_planu> Pozycja_planus
 		{
 			get
@@ -107,11 +99,19 @@ namespace scheduler
 			}
 		}
 		
-		public System.Data.Linq.Table<Prowadzacy> Prowadzacies
+		public System.Data.Linq.Table<Prowadzący> Prowadzącies
 		{
 			get
 			{
-				return this.GetTable<Prowadzacy>();
+				return this.GetTable<Prowadzący>();
+			}
+		}
+		
+		public System.Data.Linq.Table<Student> Students
+		{
+			get
+			{
+				return this.GetTable<Student>();
 			}
 		}
 		
@@ -156,9 +156,9 @@ namespace scheduler
 		
 		private int _miejsca;
 		
-		private EntitySet<Student> _Students;
-		
 		private EntitySet<Pozycja_planu> _Pozycja_planus;
+		
+		private EntitySet<Student> _Students;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -178,8 +178,8 @@ namespace scheduler
 		
 		public Grupa()
 		{
-			this._Students = new EntitySet<Student>(new Action<Student>(this.attach_Students), new Action<Student>(this.detach_Students));
 			this._Pozycja_planus = new EntitySet<Pozycja_planu>(new Action<Pozycja_planu>(this.attach_Pozycja_planus), new Action<Pozycja_planu>(this.detach_Pozycja_planus));
+			this._Students = new EntitySet<Student>(new Action<Student>(this.attach_Students), new Action<Student>(this.detach_Students));
 			OnCreated();
 		}
 		
@@ -283,19 +283,6 @@ namespace scheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Student", Storage="_Students", ThisKey="id", OtherKey="id_grupy")]
-		public EntitySet<Student> Students
-		{
-			get
-			{
-				return this._Students;
-			}
-			set
-			{
-				this._Students.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Pozycja_planu", Storage="_Pozycja_planus", ThisKey="id", OtherKey="id_grupy")]
 		public EntitySet<Pozycja_planu> Pozycja_planus
 		{
@@ -306,6 +293,19 @@ namespace scheduler
 			set
 			{
 				this._Pozycja_planus.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Student", Storage="_Students", ThisKey="id", OtherKey="id_grupy")]
+		public EntitySet<Student> Students
+		{
+			get
+			{
+				return this._Students;
+			}
+			set
+			{
+				this._Students.Assign(value);
 			}
 		}
 		
@@ -329,6 +329,18 @@ namespace scheduler
 			}
 		}
 		
+		private void attach_Pozycja_planus(Pozycja_planu entity)
+		{
+			this.SendPropertyChanging();
+			entity.Grupa = this;
+		}
+		
+		private void detach_Pozycja_planus(Pozycja_planu entity)
+		{
+			this.SendPropertyChanging();
+			entity.Grupa = null;
+		}
+		
 		private void attach_Students(Student entity)
 		{
 			this.SendPropertyChanging();
@@ -340,17 +352,613 @@ namespace scheduler
 			this.SendPropertyChanging();
 			entity.Grupa = null;
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Pozycja_planu")]
+	public partial class Pozycja_planu : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private System.Nullable<System.Guid> _id_prowadźącego;
+		
+		private System.Guid _id_grupy;
+		
+		private System.Nullable<System.Guid> _id_przedmiotu;
+		
+		private System.Nullable<System.Guid> _id_sali;
+		
+		private string _dzień;
+		
+		private System.TimeSpan _godzina_od;
+		
+		private System.TimeSpan _godzina_do;
+		
+		private long _iteracja;
+		
+		private int _osobnik;
+		
+		private EntityRef<Grupa> _Grupa;
+		
+		private EntityRef<Prowadzący> _Prowadzący;
+		
+		private EntityRef<Przedmiot> _Przedmiot;
+		
+		private EntityRef<Sala> _Sala;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void Onid_prowadźącegoChanging(System.Nullable<System.Guid> value);
+    partial void Onid_prowadźącegoChanged();
+    partial void Onid_grupyChanging(System.Guid value);
+    partial void Onid_grupyChanged();
+    partial void Onid_przedmiotuChanging(System.Nullable<System.Guid> value);
+    partial void Onid_przedmiotuChanged();
+    partial void Onid_saliChanging(System.Nullable<System.Guid> value);
+    partial void Onid_saliChanged();
+    partial void OndzieńChanging(string value);
+    partial void OndzieńChanged();
+    partial void Ongodzina_odChanging(System.TimeSpan value);
+    partial void Ongodzina_odChanged();
+    partial void Ongodzina_doChanging(System.TimeSpan value);
+    partial void Ongodzina_doChanged();
+    partial void OniteracjaChanging(long value);
+    partial void OniteracjaChanged();
+    partial void OnosobnikChanging(int value);
+    partial void OnosobnikChanged();
+    #endregion
+		
+		public Pozycja_planu()
+		{
+			this._Grupa = default(EntityRef<Grupa>);
+			this._Prowadzący = default(EntityRef<Prowadzący>);
+			this._Przedmiot = default(EntityRef<Przedmiot>);
+			this._Sala = default(EntityRef<Sala>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_prowadźącego", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> id_prowadźącego
+		{
+			get
+			{
+				return this._id_prowadźącego;
+			}
+			set
+			{
+				if ((this._id_prowadźącego != value))
+				{
+					if (this._Prowadzący.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_prowadźącegoChanging(value);
+					this.SendPropertyChanging();
+					this._id_prowadźącego = value;
+					this.SendPropertyChanged("id_prowadźącego");
+					this.Onid_prowadźącegoChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_grupy", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid id_grupy
+		{
+			get
+			{
+				return this._id_grupy;
+			}
+			set
+			{
+				if ((this._id_grupy != value))
+				{
+					if (this._Grupa.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_grupyChanging(value);
+					this.SendPropertyChanging();
+					this._id_grupy = value;
+					this.SendPropertyChanged("id_grupy");
+					this.Onid_grupyChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_przedmiotu", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> id_przedmiotu
+		{
+			get
+			{
+				return this._id_przedmiotu;
+			}
+			set
+			{
+				if ((this._id_przedmiotu != value))
+				{
+					if (this._Przedmiot.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_przedmiotuChanging(value);
+					this.SendPropertyChanging();
+					this._id_przedmiotu = value;
+					this.SendPropertyChanged("id_przedmiotu");
+					this.Onid_przedmiotuChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_sali", DbType="UniqueIdentifier")]
+		public System.Nullable<System.Guid> id_sali
+		{
+			get
+			{
+				return this._id_sali;
+			}
+			set
+			{
+				if ((this._id_sali != value))
+				{
+					if (this._Sala.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_saliChanging(value);
+					this.SendPropertyChanging();
+					this._id_sali = value;
+					this.SendPropertyChanged("id_sali");
+					this.Onid_saliChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_dzień", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string dzień
+		{
+			get
+			{
+				return this._dzień;
+			}
+			set
+			{
+				if ((this._dzień != value))
+				{
+					this.OndzieńChanging(value);
+					this.SendPropertyChanging();
+					this._dzień = value;
+					this.SendPropertyChanged("dzień");
+					this.OndzieńChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_godzina_od", DbType="Time NOT NULL")]
+		public System.TimeSpan godzina_od
+		{
+			get
+			{
+				return this._godzina_od;
+			}
+			set
+			{
+				if ((this._godzina_od != value))
+				{
+					this.Ongodzina_odChanging(value);
+					this.SendPropertyChanging();
+					this._godzina_od = value;
+					this.SendPropertyChanged("godzina_od");
+					this.Ongodzina_odChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_godzina_do", DbType="Time NOT NULL")]
+		public System.TimeSpan godzina_do
+		{
+			get
+			{
+				return this._godzina_do;
+			}
+			set
+			{
+				if ((this._godzina_do != value))
+				{
+					this.Ongodzina_doChanging(value);
+					this.SendPropertyChanging();
+					this._godzina_do = value;
+					this.SendPropertyChanged("godzina_do");
+					this.Ongodzina_doChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_iteracja", DbType="BigInt NOT NULL")]
+		public long iteracja
+		{
+			get
+			{
+				return this._iteracja;
+			}
+			set
+			{
+				if ((this._iteracja != value))
+				{
+					this.OniteracjaChanging(value);
+					this.SendPropertyChanging();
+					this._iteracja = value;
+					this.SendPropertyChanged("iteracja");
+					this.OniteracjaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_osobnik", DbType="Int NOT NULL")]
+		public int osobnik
+		{
+			get
+			{
+				return this._osobnik;
+			}
+			set
+			{
+				if ((this._osobnik != value))
+				{
+					this.OnosobnikChanging(value);
+					this.SendPropertyChanging();
+					this._osobnik = value;
+					this.SendPropertyChanged("osobnik");
+					this.OnosobnikChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Pozycja_planu", Storage="_Grupa", ThisKey="id_grupy", OtherKey="id", IsForeignKey=true)]
+		public Grupa Grupa
+		{
+			get
+			{
+				return this._Grupa.Entity;
+			}
+			set
+			{
+				Grupa previousValue = this._Grupa.Entity;
+				if (((previousValue != value) 
+							|| (this._Grupa.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Grupa.Entity = null;
+						previousValue.Pozycja_planus.Remove(this);
+					}
+					this._Grupa.Entity = value;
+					if ((value != null))
+					{
+						value.Pozycja_planus.Add(this);
+						this._id_grupy = value.id;
+					}
+					else
+					{
+						this._id_grupy = default(System.Guid);
+					}
+					this.SendPropertyChanged("Grupa");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzący_Pozycja_planu", Storage="_Prowadzący", ThisKey="id_prowadźącego", OtherKey="id", IsForeignKey=true)]
+		public Prowadzący Prowadzący
+		{
+			get
+			{
+				return this._Prowadzący.Entity;
+			}
+			set
+			{
+				Prowadzący previousValue = this._Prowadzący.Entity;
+				if (((previousValue != value) 
+							|| (this._Prowadzący.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Prowadzący.Entity = null;
+						previousValue.Pozycja_planus.Remove(this);
+					}
+					this._Prowadzący.Entity = value;
+					if ((value != null))
+					{
+						value.Pozycja_planus.Add(this);
+						this._id_prowadźącego = value.id;
+					}
+					else
+					{
+						this._id_prowadźącego = default(Nullable<System.Guid>);
+					}
+					this.SendPropertyChanged("Prowadzący");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Przedmiot_Pozycja_planu", Storage="_Przedmiot", ThisKey="id_przedmiotu", OtherKey="id", IsForeignKey=true)]
+		public Przedmiot Przedmiot
+		{
+			get
+			{
+				return this._Przedmiot.Entity;
+			}
+			set
+			{
+				Przedmiot previousValue = this._Przedmiot.Entity;
+				if (((previousValue != value) 
+							|| (this._Przedmiot.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Przedmiot.Entity = null;
+						previousValue.Pozycja_planus.Remove(this);
+					}
+					this._Przedmiot.Entity = value;
+					if ((value != null))
+					{
+						value.Pozycja_planus.Add(this);
+						this._id_przedmiotu = value.id;
+					}
+					else
+					{
+						this._id_przedmiotu = default(Nullable<System.Guid>);
+					}
+					this.SendPropertyChanged("Przedmiot");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Sala_Pozycja_planu", Storage="_Sala", ThisKey="id_sali", OtherKey="id", IsForeignKey=true)]
+		public Sala Sala
+		{
+			get
+			{
+				return this._Sala.Entity;
+			}
+			set
+			{
+				Sala previousValue = this._Sala.Entity;
+				if (((previousValue != value) 
+							|| (this._Sala.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Sala.Entity = null;
+						previousValue.Pozycja_planus.Remove(this);
+					}
+					this._Sala.Entity = value;
+					if ((value != null))
+					{
+						value.Pozycja_planus.Add(this);
+						this._id_sali = value.id;
+					}
+					else
+					{
+						this._id_sali = default(Nullable<System.Guid>);
+					}
+					this.SendPropertyChanged("Sala");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Prowadzący")]
+	public partial class Prowadzący : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private System.Guid _id;
+		
+		private string _nazwa;
+		
+		private string _tytuł;
+		
+		private EntitySet<Pozycja_planu> _Pozycja_planus;
+		
+		private EntitySet<Przypisany_przedmiot> _Przypisany_przedmiots;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnidChanging(System.Guid value);
+    partial void OnidChanged();
+    partial void OnnazwaChanging(string value);
+    partial void OnnazwaChanged();
+    partial void OntytułChanging(string value);
+    partial void OntytułChanged();
+    #endregion
+		
+		public Prowadzący()
+		{
+			this._Pozycja_planus = new EntitySet<Pozycja_planu>(new Action<Pozycja_planu>(this.attach_Pozycja_planus), new Action<Pozycja_planu>(this.detach_Pozycja_planus));
+			this._Przypisany_przedmiots = new EntitySet<Przypisany_przedmiot>(new Action<Przypisany_przedmiot>(this.attach_Przypisany_przedmiots), new Action<Przypisany_przedmiot>(this.detach_Przypisany_przedmiots));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
+		public System.Guid id
+		{
+			get
+			{
+				return this._id;
+			}
+			set
+			{
+				if ((this._id != value))
+				{
+					this.OnidChanging(value);
+					this.SendPropertyChanging();
+					this._id = value;
+					this.SendPropertyChanged("id");
+					this.OnidChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nazwa", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string nazwa
+		{
+			get
+			{
+				return this._nazwa;
+			}
+			set
+			{
+				if ((this._nazwa != value))
+				{
+					this.OnnazwaChanging(value);
+					this.SendPropertyChanging();
+					this._nazwa = value;
+					this.SendPropertyChanged("nazwa");
+					this.OnnazwaChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_tytuł", DbType="NVarChar(50)")]
+		public string tytuł
+		{
+			get
+			{
+				return this._tytuł;
+			}
+			set
+			{
+				if ((this._tytuł != value))
+				{
+					this.OntytułChanging(value);
+					this.SendPropertyChanging();
+					this._tytuł = value;
+					this.SendPropertyChanged("tytuł");
+					this.OntytułChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzący_Pozycja_planu", Storage="_Pozycja_planus", ThisKey="id", OtherKey="id_prowadźącego")]
+		public EntitySet<Pozycja_planu> Pozycja_planus
+		{
+			get
+			{
+				return this._Pozycja_planus;
+			}
+			set
+			{
+				this._Pozycja_planus.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzący_Przypisany_przedmiot", Storage="_Przypisany_przedmiots", ThisKey="id", OtherKey="id_prowadźącego")]
+		public EntitySet<Przypisany_przedmiot> Przypisany_przedmiots
+		{
+			get
+			{
+				return this._Przypisany_przedmiots;
+			}
+			set
+			{
+				this._Przypisany_przedmiots.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
 		
 		private void attach_Pozycja_planus(Pozycja_planu entity)
 		{
 			this.SendPropertyChanging();
-			entity.Grupa = this;
+			entity.Prowadzący = this;
 		}
 		
 		private void detach_Pozycja_planus(Pozycja_planu entity)
 		{
 			this.SendPropertyChanging();
-			entity.Grupa = null;
+			entity.Prowadzący = null;
+		}
+		
+		private void attach_Przypisany_przedmiots(Przypisany_przedmiot entity)
+		{
+			this.SendPropertyChanging();
+			entity.Prowadzący = this;
+		}
+		
+		private void detach_Przypisany_przedmiots(Przypisany_przedmiot entity)
+		{
+			this.SendPropertyChanging();
+			entity.Prowadzący = null;
 		}
 	}
 	
@@ -370,6 +978,8 @@ namespace scheduler
 		
 		private int _rok;
 		
+		private string _kierunek;
+		
 		private EntityRef<Grupa> _Grupa;
 		
     #region Extensibility Method Definitions
@@ -386,6 +996,8 @@ namespace scheduler
     partial void Onid_grupyChanged();
     partial void OnrokChanging(int value);
     partial void OnrokChanged();
+    partial void OnkierunekChanging(string value);
+    partial void OnkierunekChanged();
     #endregion
 		
 		public Student()
@@ -498,6 +1110,26 @@ namespace scheduler
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_kierunek", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string kierunek
+		{
+			get
+			{
+				return this._kierunek;
+			}
+			set
+			{
+				if ((this._kierunek != value))
+				{
+					this.OnkierunekChanging(value);
+					this.SendPropertyChanging();
+					this._kierunek = value;
+					this.SendPropertyChanged("kierunek");
+					this.OnkierunekChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Student", Storage="_Grupa", ThisKey="id_grupy", OtherKey="id", IsForeignKey=true)]
 		public Grupa Grupa
 		{
@@ -553,562 +1185,6 @@ namespace scheduler
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Pozycja_planu")]
-	public partial class Pozycja_planu : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _id;
-		
-		private System.Nullable<System.Guid> _id_prowadźacego;
-		
-		private System.Guid _id_grupy;
-		
-		private System.Nullable<System.Guid> _id_przedmiotu;
-		
-		private System.Nullable<System.Guid> _id_sali;
-		
-		private string _dzień;
-		
-		private System.TimeSpan _godzina_od;
-		
-		private System.TimeSpan _godzina_do;
-		
-		private EntityRef<Grupa> _Grupa;
-		
-		private EntityRef<Prowadzacy> _Prowadzacy;
-		
-		private EntityRef<Przedmiot> _Przedmiot;
-		
-		private EntityRef<Sala> _Sala;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(System.Guid value);
-    partial void OnidChanged();
-    partial void Onid_prowadzacegoChanging(System.Nullable<System.Guid> value);
-    partial void Onid_prowadzacegoChanged();
-    partial void Onid_grupyChanging(System.Guid value);
-    partial void Onid_grupyChanged();
-    partial void Onid_przedmiotuChanging(System.Nullable<System.Guid> value);
-    partial void Onid_przedmiotuChanged();
-    partial void Onid_saliChanging(System.Nullable<System.Guid> value);
-    partial void Onid_saliChanged();
-    partial void OndzienChanging(string value);
-    partial void OndzienChanged();
-    partial void Ongodzina_odChanging(System.TimeSpan value);
-    partial void Ongodzina_odChanged();
-    partial void Ongodzina_doChanging(System.TimeSpan value);
-    partial void Ongodzina_doChanged();
-    #endregion
-		
-		public Pozycja_planu()
-		{
-			this._Grupa = default(EntityRef<Grupa>);
-			this._Prowadzacy = default(EntityRef<Prowadzacy>);
-			this._Przedmiot = default(EntityRef<Przedmiot>);
-			this._Sala = default(EntityRef<Sala>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="id_prowadźacego", Storage="_id_prowadźacego", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> id_prowadzacego
-		{
-			get
-			{
-				return this._id_prowadźacego;
-			}
-			set
-			{
-				if ((this._id_prowadźacego != value))
-				{
-					this.Onid_prowadzacegoChanging(value);
-					this.SendPropertyChanging();
-					this._id_prowadźacego = value;
-					this.SendPropertyChanged("id_prowadzacego");
-					this.Onid_prowadzacegoChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_grupy", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid id_grupy
-		{
-			get
-			{
-				return this._id_grupy;
-			}
-			set
-			{
-				if ((this._id_grupy != value))
-				{
-					if (this._Grupa.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_grupyChanging(value);
-					this.SendPropertyChanging();
-					this._id_grupy = value;
-					this.SendPropertyChanged("id_grupy");
-					this.Onid_grupyChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_przedmiotu", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> id_przedmiotu
-		{
-			get
-			{
-				return this._id_przedmiotu;
-			}
-			set
-			{
-				if ((this._id_przedmiotu != value))
-				{
-					if (this._Przedmiot.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_przedmiotuChanging(value);
-					this.SendPropertyChanging();
-					this._id_przedmiotu = value;
-					this.SendPropertyChanged("id_przedmiotu");
-					this.Onid_przedmiotuChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_sali", DbType="UniqueIdentifier")]
-		public System.Nullable<System.Guid> id_sali
-		{
-			get
-			{
-				return this._id_sali;
-			}
-			set
-			{
-				if ((this._id_sali != value))
-				{
-					if (this._Sala.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.Onid_saliChanging(value);
-					this.SendPropertyChanging();
-					this._id_sali = value;
-					this.SendPropertyChanged("id_sali");
-					this.Onid_saliChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="dzień", Storage="_dzień", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string dzien
-		{
-			get
-			{
-				return this._dzień;
-			}
-			set
-			{
-				if ((this._dzień != value))
-				{
-					this.OndzienChanging(value);
-					this.SendPropertyChanging();
-					this._dzień = value;
-					this.SendPropertyChanged("dzien");
-					this.OndzienChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_godzina_od", DbType="Time NOT NULL")]
-		public System.TimeSpan godzina_od
-		{
-			get
-			{
-				return this._godzina_od;
-			}
-			set
-			{
-				if ((this._godzina_od != value))
-				{
-					this.Ongodzina_odChanging(value);
-					this.SendPropertyChanging();
-					this._godzina_od = value;
-					this.SendPropertyChanged("godzina_od");
-					this.Ongodzina_odChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_godzina_do", DbType="Time NOT NULL")]
-		public System.TimeSpan godzina_do
-		{
-			get
-			{
-				return this._godzina_do;
-			}
-			set
-			{
-				if ((this._godzina_do != value))
-				{
-					this.Ongodzina_doChanging(value);
-					this.SendPropertyChanging();
-					this._godzina_do = value;
-					this.SendPropertyChanged("godzina_do");
-					this.Ongodzina_doChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Grupa_Pozycja_planu", Storage="_Grupa", ThisKey="id_grupy", OtherKey="id", IsForeignKey=true)]
-		public Grupa Grupa
-		{
-			get
-			{
-				return this._Grupa.Entity;
-			}
-			set
-			{
-				Grupa previousValue = this._Grupa.Entity;
-				if (((previousValue != value) 
-							|| (this._Grupa.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Grupa.Entity = null;
-						previousValue.Pozycja_planus.Remove(this);
-					}
-					this._Grupa.Entity = value;
-					if ((value != null))
-					{
-						value.Pozycja_planus.Add(this);
-						this._id_grupy = value.id;
-					}
-					else
-					{
-						this._id_grupy = default(System.Guid);
-					}
-					this.SendPropertyChanged("Grupa");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzacy_Pozycja_planu", Storage="_Prowadzacy", ThisKey="id_prowadzacego", OtherKey="id", IsForeignKey=true)]
-		public Prowadzacy Prowadzacy
-		{
-			get
-			{
-				return this._Prowadzacy.Entity;
-			}
-			set
-			{
-				Prowadzacy previousValue = this._Prowadzacy.Entity;
-				if (((previousValue != value) 
-							|| (this._Prowadzacy.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Prowadzacy.Entity = null;
-						previousValue.Pozycja_planus.Remove(this);
-					}
-					this._Prowadzacy.Entity = value;
-					if ((value != null))
-					{
-						value.Pozycja_planus.Add(this);
-						this._id_prowadźacego = value.id;
-					}
-					else
-					{
-						this._id_prowadźacego = default(Nullable<System.Guid>);
-					}
-					this.SendPropertyChanged("Prowadzacy");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Przedmiot_Pozycja_planu", Storage="_Przedmiot", ThisKey="id_przedmiotu", OtherKey="id", IsForeignKey=true)]
-		public Przedmiot Przedmiot
-		{
-			get
-			{
-				return this._Przedmiot.Entity;
-			}
-			set
-			{
-				Przedmiot previousValue = this._Przedmiot.Entity;
-				if (((previousValue != value) 
-							|| (this._Przedmiot.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Przedmiot.Entity = null;
-						previousValue.Pozycja_planus.Remove(this);
-					}
-					this._Przedmiot.Entity = value;
-					if ((value != null))
-					{
-						value.Pozycja_planus.Add(this);
-						this._id_przedmiotu = value.id;
-					}
-					else
-					{
-						this._id_przedmiotu = default(Nullable<System.Guid>);
-					}
-					this.SendPropertyChanged("Przedmiot");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Sala_Pozycja_planu", Storage="_Sala", ThisKey="id_sali", OtherKey="id", IsForeignKey=true)]
-		public Sala Sala
-		{
-			get
-			{
-				return this._Sala.Entity;
-			}
-			set
-			{
-				Sala previousValue = this._Sala.Entity;
-				if (((previousValue != value) 
-							|| (this._Sala.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Sala.Entity = null;
-						previousValue.Pozycja_planus.Remove(this);
-					}
-					this._Sala.Entity = value;
-					if ((value != null))
-					{
-						value.Pozycja_planus.Add(this);
-						this._id_sali = value.id;
-					}
-					else
-					{
-						this._id_sali = default(Nullable<System.Guid>);
-					}
-					this.SendPropertyChanged("Sala");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Prowadzący")]
-	public partial class Prowadzacy : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private System.Guid _id;
-		
-		private string _nazwa;
-		
-		private string _tytuł;
-		
-		private EntitySet<Pozycja_planu> _Pozycja_planus;
-		
-		private EntitySet<Przypisany_przedmiot> _Przypisany_przedmiots;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnidChanging(System.Guid value);
-    partial void OnidChanged();
-    partial void OnnazwaChanging(string value);
-    partial void OnnazwaChanged();
-    partial void OntytulChanging(string value);
-    partial void OntytulChanged();
-    #endregion
-		
-		public Prowadzacy()
-		{
-			this._Pozycja_planus = new EntitySet<Pozycja_planu>(new Action<Pozycja_planu>(this.attach_Pozycja_planus), new Action<Pozycja_planu>(this.detach_Pozycja_planus));
-			this._Przypisany_przedmiots = new EntitySet<Przypisany_przedmiot>(new Action<Przypisany_przedmiot>(this.attach_Przypisany_przedmiots), new Action<Przypisany_przedmiot>(this.detach_Przypisany_przedmiots));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id", DbType="UniqueIdentifier NOT NULL", IsPrimaryKey=true)]
-		public System.Guid id
-		{
-			get
-			{
-				return this._id;
-			}
-			set
-			{
-				if ((this._id != value))
-				{
-					this.OnidChanging(value);
-					this.SendPropertyChanging();
-					this._id = value;
-					this.SendPropertyChanged("id");
-					this.OnidChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_nazwa", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string nazwa
-		{
-			get
-			{
-				return this._nazwa;
-			}
-			set
-			{
-				if ((this._nazwa != value))
-				{
-					this.OnnazwaChanging(value);
-					this.SendPropertyChanging();
-					this._nazwa = value;
-					this.SendPropertyChanged("nazwa");
-					this.OnnazwaChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="tytuł", Storage="_tytuł", DbType="NVarChar(50)")]
-		public string tytul
-		{
-			get
-			{
-				return this._tytuł;
-			}
-			set
-			{
-				if ((this._tytuł != value))
-				{
-					this.OntytulChanging(value);
-					this.SendPropertyChanging();
-					this._tytuł = value;
-					this.SendPropertyChanged("tytul");
-					this.OntytulChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzacy_Pozycja_planu", Storage="_Pozycja_planus", ThisKey="id", OtherKey="id_prowadzacego")]
-		public EntitySet<Pozycja_planu> Pozycja_planus
-		{
-			get
-			{
-				return this._Pozycja_planus;
-			}
-			set
-			{
-				this._Pozycja_planus.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzacy_Przypisany_przedmiot", Storage="_Przypisany_przedmiots", ThisKey="id", OtherKey="id_prowadzacego")]
-		public EntitySet<Przypisany_przedmiot> Przypisany_przedmiots
-		{
-			get
-			{
-				return this._Przypisany_przedmiots;
-			}
-			set
-			{
-				this._Przypisany_przedmiots.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Pozycja_planus(Pozycja_planu entity)
-		{
-			this.SendPropertyChanging();
-			entity.Prowadzacy = this;
-		}
-		
-		private void detach_Pozycja_planus(Pozycja_planu entity)
-		{
-			this.SendPropertyChanging();
-			entity.Prowadzacy = null;
-		}
-		
-		private void attach_Przypisany_przedmiots(Przypisany_przedmiot entity)
-		{
-			this.SendPropertyChanging();
-			entity.Prowadzacy = this;
-		}
-		
-		private void detach_Przypisany_przedmiots(Przypisany_przedmiot entity)
-		{
-			this.SendPropertyChanging();
-			entity.Prowadzacy = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Przedmiot")]
 	public partial class Przedmiot : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1151,8 +1227,8 @@ namespace scheduler
     partial void OnkierunekChanged();
     partial void OnwykładChanging(int value);
     partial void OnwykładChanged();
-    partial void OncwiczeniaChanging(int value);
-    partial void OncwiczeniaChanged();
+    partial void OnćwiczeniaChanging(int value);
+    partial void OnćwiczeniaChanged();
     partial void OnlaboratoriaChanging(int value);
     partial void OnlaboratoriaChanged();
     #endregion
@@ -1284,8 +1360,8 @@ namespace scheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ćwiczenia", Storage="_ćwiczenia", DbType="Int NOT NULL")]
-		public int cwiczenia
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ćwiczenia", DbType="Int NOT NULL")]
+		public int ćwiczenia
 		{
 			get
 			{
@@ -1295,11 +1371,11 @@ namespace scheduler
 			{
 				if ((this._ćwiczenia != value))
 				{
-					this.OncwiczeniaChanging(value);
+					this.OnćwiczeniaChanging(value);
 					this.SendPropertyChanging();
 					this._ćwiczenia = value;
-					this.SendPropertyChanged("cwiczenia");
-					this.OncwiczeniaChanged();
+					this.SendPropertyChanged("ćwiczenia");
+					this.OnćwiczeniaChanged();
 				}
 			}
 		}
@@ -1403,15 +1479,15 @@ namespace scheduler
 		
 		private System.Guid _id;
 		
-		private System.Guid _id_prowadźacego;
+		private System.Guid _id_prowadźącego;
 		
 		private System.Guid _id_przedmiotu;
 		
 		private string _rodzaj_zajęć;
 		
-		private int _ilość_zajęć;
+		private System.Nullable<int> _ilość_zajęć;
 		
-		private EntityRef<Prowadzacy> _Prowadzacy;
+		private EntityRef<Prowadzący> _Prowadzący;
 		
 		private EntityRef<Przedmiot> _Przedmiot;
 		
@@ -1421,19 +1497,19 @@ namespace scheduler
     partial void OnCreated();
     partial void OnidChanging(System.Guid value);
     partial void OnidChanged();
-    partial void Onid_prowadzacegoChanging(System.Guid value);
-    partial void Onid_prowadzacegoChanged();
+    partial void Onid_prowadźącegoChanging(System.Guid value);
+    partial void Onid_prowadźącegoChanged();
     partial void Onid_przedmiotuChanging(System.Guid value);
     partial void Onid_przedmiotuChanged();
-    partial void Onrodzaj_zajecChanging(string value);
-    partial void Onrodzaj_zajecChanged();
-    partial void Onilosc_zajecChanging(int value);
-    partial void Onilosc_zajecChanged();
+    partial void Onrodzaj_zajęćChanging(string value);
+    partial void Onrodzaj_zajęćChanged();
+    partial void Onilość_zajęćChanging(System.Nullable<int> value);
+    partial void Onilość_zajęćChanged();
     #endregion
 		
 		public Przypisany_przedmiot()
 		{
-			this._Prowadzacy = default(EntityRef<Prowadzacy>);
+			this._Prowadzący = default(EntityRef<Prowadzący>);
 			this._Przedmiot = default(EntityRef<Przedmiot>);
 			OnCreated();
 		}
@@ -1458,22 +1534,26 @@ namespace scheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="id_prowadźacego", Storage="_id_prowadźacego", DbType="UniqueIdentifier NOT NULL")]
-		public System.Guid id_prowadzacego
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_prowadźącego", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid id_prowadźącego
 		{
 			get
 			{
-				return this._id_prowadźacego;
+				return this._id_prowadźącego;
 			}
 			set
 			{
-				if ((this._id_prowadźacego != value))
+				if ((this._id_prowadźącego != value))
 				{
-					this.Onid_prowadzacegoChanging(value);
+					if (this._Prowadzący.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_prowadźącegoChanging(value);
 					this.SendPropertyChanging();
-					this._id_prowadźacego = value;
-					this.SendPropertyChanged("id_prowadzacego");
-					this.Onid_prowadzacegoChanged();
+					this._id_prowadźącego = value;
+					this.SendPropertyChanged("id_prowadźącego");
+					this.Onid_prowadźącegoChanged();
 				}
 			}
 		}
@@ -1502,8 +1582,8 @@ namespace scheduler
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="rodzaj_zajęć", Storage="_rodzaj_zajęć", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
-		public string rodzaj_zajec
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_rodzaj_zajęć", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
+		public string rodzaj_zajęć
 		{
 			get
 			{
@@ -1513,17 +1593,17 @@ namespace scheduler
 			{
 				if ((this._rodzaj_zajęć != value))
 				{
-					this.Onrodzaj_zajecChanging(value);
+					this.Onrodzaj_zajęćChanging(value);
 					this.SendPropertyChanging();
 					this._rodzaj_zajęć = value;
-					this.SendPropertyChanged("rodzaj_zajec");
-					this.Onrodzaj_zajecChanged();
+					this.SendPropertyChanged("rodzaj_zajęć");
+					this.Onrodzaj_zajęćChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="ilość_zajęć", Storage="_ilość_zajęć", DbType="Int NOT NULL")]
-		public int ilosc_zajec
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ilość_zajęć", DbType="Int")]
+		public System.Nullable<int> ilość_zajęć
 		{
 			get
 			{
@@ -1533,45 +1613,45 @@ namespace scheduler
 			{
 				if ((this._ilość_zajęć != value))
 				{
-					this.Onilosc_zajecChanging(value);
+					this.Onilość_zajęćChanging(value);
 					this.SendPropertyChanging();
 					this._ilość_zajęć = value;
-					this.SendPropertyChanged("ilosc_zajec");
-					this.Onilosc_zajecChanged();
+					this.SendPropertyChanged("ilość_zajęć");
+					this.Onilość_zajęćChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzacy_Przypisany_przedmiot", Storage="_Prowadzacy", ThisKey="id_prowadzacego", OtherKey="id", IsForeignKey=true)]
-		public Prowadzacy Prowadzacy
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Prowadzący_Przypisany_przedmiot", Storage="_Prowadzący", ThisKey="id_prowadźącego", OtherKey="id", IsForeignKey=true)]
+		public Prowadzący Prowadzący
 		{
 			get
 			{
-				return this._Prowadzacy.Entity;
+				return this._Prowadzący.Entity;
 			}
 			set
 			{
-				Prowadzacy previousValue = this._Prowadzacy.Entity;
+				Prowadzący previousValue = this._Prowadzący.Entity;
 				if (((previousValue != value) 
-							|| (this._Prowadzacy.HasLoadedOrAssignedValue == false)))
+							|| (this._Prowadzący.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Prowadzacy.Entity = null;
+						this._Prowadzący.Entity = null;
 						previousValue.Przypisany_przedmiots.Remove(this);
 					}
-					this._Prowadzacy.Entity = value;
+					this._Prowadzący.Entity = value;
 					if ((value != null))
 					{
 						value.Przypisany_przedmiots.Add(this);
-						this._id_prowadźacego = value.id;
+						this._id_prowadźącego = value.id;
 					}
 					else
 					{
-						this._id_prowadźacego = default(System.Guid);
+						this._id_prowadźącego = default(System.Guid);
 					}
-					this.SendPropertyChanged("Prowadzacy");
+					this.SendPropertyChanged("Prowadzący");
 				}
 			}
 		}

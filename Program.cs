@@ -12,9 +12,9 @@ namespace scheduler
         static void InitializeFromDataBase(BazaDanychDataContext db,
             string semestr,
             out IList<Zajecia> genotyp,
-            out IDictionary<Przedmiot, IList<Prowadzacy>> prowadzacyZajecia)
+            out IDictionary<Przedmiot, IList<Prowadzący>> prowadzacyZajecia)
         {                    
-            prowadzacyZajecia = new Dictionary<Przedmiot, IList<Prowadzacy>>();
+            prowadzacyZajecia = new Dictionary<Przedmiot, IList<Prowadzący>>();
 
             //filtr przedmiotow
             var przedmiotyWSemestrze = db.Przedmiots.Select(x => x).Where(x => x.semestr.Equals(semestr)).ToList();
@@ -31,14 +31,15 @@ namespace scheduler
 
 
             //do ustalenia genotypu
+            var l = new { db.Przedmiots.First().rok, db.Przedmiots.First().kierunek };
             var listaObligatoryjnychPrzedmiotow = (from przedmiot in db.Przedmiots
                        join grupa in db.Grupas on new { przedmiot.rok, przedmiot.kierunek } equals new { grupa.rok, grupa.kierunek }
-                       select new { Grupa = grupa, Przedmiot = przedmiot});
+                       select new { Grupa = grupa, Przedmiot = przedmiot}).ToList();
                                      
             genotyp = new List<Zajecia>();
             foreach (var e in listaObligatoryjnychPrzedmiotow)              
             {                                       
-                for (int i = 0,length =  e.Przedmiot.cwiczenia/15; i < length; i++)
+                for (int i = 0,length =  e.Przedmiot.ćwiczenia/15; i < length; i++)
                     genotyp.Add(new Zajecia(){Typ=TypZajec.Cwiczenia, Grupa = e.Grupa, Przedmiot = e.Przedmiot, Prowadzacy=null, Index=i});     
 
                 for (int i = 0, length = e.Przedmiot.laboratoria/15; i < length; i++)    
@@ -47,12 +48,12 @@ namespace scheduler
             
 
             //do mutacji                   
-            var prowadzacyWszyscy = db.Prowadzacies.Select(x => x);
+            var prowadzacyWszyscy = db.Prowadzącies.Select(x => x).ToList();
             foreach (var e in przedmiotyWSemestrze)
             {
                 var przypisaneZajecia = (from przydzial in db.Przypisany_przedmiots 
                                          where przydzial.Przedmiot.Equals(e.id)
-                                         select przydzial.Prowadzacy).ToList();
+                                         select przydzial.Prowadzący).ToList();
                 prowadzacyZajecia.Add(e, przypisaneZajecia);
             }
 
@@ -62,7 +63,7 @@ namespace scheduler
         {                                        
             //---pobranie danych z bazy danych---    
             var db = new BazaDanychDataContext();                          
-            IDictionary<Przedmiot, IList<Prowadzacy>> prowadzacyZajecia;
+            IDictionary<Przedmiot, IList<Prowadzący>> prowadzacyZajecia;
             IList<Zajecia> genotyp;
 
             InitializeFromDataBase(db, "zimowy", out genotyp, out prowadzacyZajecia);

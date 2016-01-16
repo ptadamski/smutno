@@ -11,9 +11,9 @@ namespace scheduler
         private IRandomGenerator<double> _randMutationRate;
         private IRandomGenerator<int> _randGenSelector;
         private double _mutationSuccessRate;
-        private IDictionary<Przedmiot, IList<Prowadzacy>> _prowadzacyZajecia;
+        private IDictionary<Przedmiot, IList<Prowadzący>> _prowadzacyZajecia;
 
-        public TimetableTeacherMutation(IDictionary<Przedmiot, IList<Prowadzacy>> prowadzacyZajecia, IRandomGenerator<double> randMutationRate,
+        public TimetableTeacherMutation(IDictionary<Przedmiot, IList<Prowadzący>> prowadzacyZajecia, IRandomGenerator<double> randMutationRate,
                 IRandomGenerator<int> randGenSelector, double mutationSuccessRate)
         {
             _prowadzacyZajecia = prowadzacyZajecia;

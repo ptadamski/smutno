@@ -21,7 +21,7 @@ namespace scheduler
         }
 
         public Przedmiot Przedmiot { get; set; }
-        public Prowadzacy Prowadzacy { get; set; }
+        public Prowadz¹cy Prowadzacy { get; set; }
         public Grupa Grupa { get; set; }
         public int Index { get; set; }
         public TypZajec Typ { get; set; }
