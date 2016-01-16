@@ -272,8 +272,7 @@ namespace scheduler
             this.output.Focus();
             this.start.Visible = true;
             this.restart.Visible = false;
-            textBox1.ReadOnly = false;
-            textBox2.ReadOnly = false;
+            this.eksport.Enabled = true;
         }
 
         private void start_Click(object sender, EventArgs e)
@@ -290,8 +289,7 @@ namespace scheduler
             this.comboBox1.Enabled = false;
             this.start.Visible = false;
             this.restart.Visible = true;
-            this.textBox1.ReadOnly = true;
-            this.textBox2.ReadOnly = true;
+            this.eksport.Enabled = false;
             this.dataGridView1.ReadOnly = true; this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView2.ReadOnly = true; this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView3.ReadOnly = true; this.dataGridView3.AllowUserToDeleteRows = false;

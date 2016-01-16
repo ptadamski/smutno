@@ -31,18 +31,15 @@ namespace scheduler
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.stop = new System.Windows.Forms.Button();
             this.start = new System.Windows.Forms.Button();
             this.output = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.prowadzącyBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.eksport = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.restart = new System.Windows.Forms.Button();
@@ -105,7 +102,6 @@ namespace scheduler
             this.studentTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.StudentTableAdapter();
             this.salaTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.SalaTableAdapter();
             this.przypisany_przedmiotTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.Przypisany_przedmiotTableAdapter();
-            this.eksport = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource)).BeginInit();
@@ -183,38 +179,6 @@ namespace scheduler
             this.output.TabIndex = 2;
             this.output.Text = "";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(293, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(227, 13);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Zatrzymaj po osiągnięciu funkcji ocenu równej:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(526, 9);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 5;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(293, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(176, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Zatrzymaj po wykonaniu i-tej iteracji:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(526, 35);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 7;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -238,12 +202,8 @@ namespace scheduler
             this.tabPage1.Controls.Add(this.restart);
             this.tabPage1.Controls.Add(this.wykres);
             this.tabPage1.Controls.Add(this.output);
-            this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.textBox2);
             this.tabPage1.Controls.Add(this.start);
             this.tabPage1.Controls.Add(this.stop);
-            this.tabPage1.Controls.Add(this.textBox1);
-            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -252,10 +212,20 @@ namespace scheduler
             this.tabPage1.Text = "Program";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // eksport
+            // 
+            this.eksport.Location = new System.Drawing.Point(6, 319);
+            this.eksport.Name = "eksport";
+            this.eksport.Size = new System.Drawing.Size(281, 28);
+            this.eksport.TabIndex = 12;
+            this.eksport.Text = "Eksportuj do pliku";
+            this.eksport.UseVisualStyleBackColor = true;
+            this.eksport.Click += new System.EventHandler(this.eksport_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(293, 64);
+            this.label3.Location = new System.Drawing.Point(293, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 11;
@@ -268,7 +238,7 @@ namespace scheduler
             this.comboBox1.Items.AddRange(new object[] {
             "zimowy",
             "letni"});
-            this.comboBox1.Location = new System.Drawing.Point(526, 61);
+            this.comboBox1.Location = new System.Drawing.Point(526, 6);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(100, 21);
             this.comboBox1.TabIndex = 10;
@@ -286,13 +256,13 @@ namespace scheduler
             // 
             // wykres
             // 
-            chartArea2.Name = "Wykres";
-            this.wykres.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.wykres.Legends.Add(legend2);
-            this.wykres.Location = new System.Drawing.Point(293, 88);
+            chartArea1.Name = "Wykres";
+            this.wykres.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.wykres.Legends.Add(legend1);
+            this.wykres.Location = new System.Drawing.Point(293, 33);
             this.wykres.Name = "wykres";
-            this.wykres.Size = new System.Drawing.Size(333, 259);
+            this.wykres.Size = new System.Drawing.Size(333, 314);
             this.wykres.TabIndex = 8;
             this.wykres.Text = "wykres";
             // 
@@ -797,16 +767,6 @@ namespace scheduler
             // 
             this.przypisany_przedmiotTableAdapter.ClearBeforeFill = true;
             // 
-            // eksport
-            // 
-            this.eksport.Location = new System.Drawing.Point(6, 319);
-            this.eksport.Name = "eksport";
-            this.eksport.Size = new System.Drawing.Size(281, 28);
-            this.eksport.TabIndex = 12;
-            this.eksport.Text = "Eksportuj do pliku";
-            this.eksport.UseVisualStyleBackColor = true;
-            this.eksport.Click += new System.EventHandler(this.eksport_Click);
-            // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "xslx";
@@ -874,10 +834,6 @@ namespace scheduler
         private System.Windows.Forms.Button stop;
         private System.Windows.Forms.Button start;
         private System.Windows.Forms.RichTextBox output;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
         private dtas_s383964DataSet dtas_s383964DataSet1;
         private System.Windows.Forms.BindingSource przedmiotBindingSource;
         private dtas_s383964DataSetTableAdapters.PrzedmiotTableAdapter przedmiotTableAdapter;
