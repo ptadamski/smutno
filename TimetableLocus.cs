@@ -40,6 +40,12 @@ namespace scheduler
         {
             get { return _classRoom; }
             set { _classRoom = value % _maxClassRooomCount; }
-        }   
+        }
+
+        public override bool Equals(object obj)
+        {
+            TimetableLocus t = (TimetableLocus)obj;
+            return _time == t._time && _classRoom == t._classRoom;
+        }
     }
 }

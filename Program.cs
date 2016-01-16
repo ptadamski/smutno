@@ -32,7 +32,7 @@ namespace scheduler
 
             //do ustalenia genotypu
             var l = new { db.Przedmiots.First().rok, db.Przedmiots.First().kierunek };
-            var listaObligatoryjnychPrzedmiotow = (from przedmiot in db.Przedmiots
+            var listaObligatoryjnychPrzedmiotow = (from przedmiot in przedmiotyWSemestrze
                        join grupa in db.Grupas on new { przedmiot.rok, przedmiot.kierunek } equals new { grupa.rok, grupa.kierunek }
                        select new { Grupa = grupa, Przedmiot = przedmiot}).ToList();
                                      
@@ -49,12 +49,14 @@ namespace scheduler
 
             //do mutacji                   
             var prowadzacyWszyscy = db.Prowadzącies.Select(x => x).ToList();
+            var n = 0;
             foreach (var e in przedmiotyWSemestrze)
             {
                 var przypisaneZajecia = (from przydzial in db.Przypisany_przedmiots 
-                                         where przydzial.Przedmiot.Equals(e.id)
+                                         where przydzial.Przedmiot.Equals(e)
                                          select przydzial.Prowadzący).ToList();
                 prowadzacyZajecia.Add(e, przypisaneZajecia);
+                n = n + przypisaneZajecia.Count;
             }
 
         }
@@ -106,6 +108,7 @@ namespace scheduler
                 //odtworzyc populacje duzych planow
                 //i ocenic...
 
+            int it = 0;
 
             do
             {
@@ -158,6 +161,9 @@ namespace scheduler
                     foreach (var planGrupy in planyGrup)
                         osobnik.Concat(planGrupy.Value[i]);
                 }
+
+                Console.WriteLine("{0}", it++);
+
             } while (population.Select(x => evalSelector.Evaluate(x)).Average() < 0.95);
 
         }
@@ -481,5 +487,4 @@ namespace scheduler
         //    Console.ReadLine();
         //}
     }
-
 }

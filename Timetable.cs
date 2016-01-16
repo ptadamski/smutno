@@ -171,6 +171,8 @@ namespace scheduler
                 Zajecia item;
                 if (_items.TryGetValue(index, out item))
                     _items[index] = value;
+                else
+                    _items.Add(index, value);
             }
         }
 
