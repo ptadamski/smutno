@@ -37,7 +37,7 @@
       <Association Name="Sala_Pozycja_planu" Member="Sala" ThisKey="id_sali" OtherKey="id" Type="Sala" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Prowadzacy" Member="Prowadzacies">
+  <Table Name="dbo.Prowadzący" Member="Prowadzacies">
     <Type Name="Prowadzacy">
       <Column Name="id" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Column Name="nazwa" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
