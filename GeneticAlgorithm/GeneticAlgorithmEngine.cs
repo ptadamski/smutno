@@ -15,7 +15,8 @@ namespace scheduler
         int _populationLimit;
         bool _stop;
 
-        public GeneticAlgorithmEngine(IList<_Chromosome> population, ISelector<_Chromosome> selector, IReproducer<_Chromosome> reproducer, int populationLimit)
+        public GeneticAlgorithmEngine(IList<_Chromosome> population, ISelector<_Chromosome> selector,
+            IReproducer<_Chromosome> reproducer, int populationLimit)
         {
             _selector = selector;
             _reproducer = reproducer;
@@ -25,7 +26,7 @@ namespace scheduler
 
         public bool Iterate(Func<bool> stopCondition)
         {
-            bool _stop = stopCondition();
+            _stop = stopCondition();
             IList<_Chromosome> individuals;     
                                       
             if (!_stop)

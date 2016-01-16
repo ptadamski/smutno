@@ -11,12 +11,12 @@ namespace scheduler
         private IRandomGenerator<double> _randMutationRate;
         private IRandomGenerator<int> _randGenSelector;
         private double _mutationSuccessRate;
-        private IDictionary<Prowadzacy, IList<Zajecia>> _prowadzacy;
+        private IDictionary<Przedmiot, IList<Prowadzacy>> _prowadzacyZajecia;
 
-        public TimetableTeacherMutation(IDictionary<Prowadzacy, IList<Zajecia>> prowadzacy, IRandomGenerator<double> randMutationRate,
+        public TimetableTeacherMutation(IDictionary<Przedmiot, IList<Prowadzacy>> prowadzacyZajecia, IRandomGenerator<double> randMutationRate,
                 IRandomGenerator<int> randGenSelector, double mutationSuccessRate)
         {
-            _prowadzacy = prowadzacy;
+            _prowadzacyZajecia = prowadzacyZajecia;
             _randMutationRate = randMutationRate;
             _randGenSelector = randGenSelector;
             _mutationSuccessRate = mutationSuccessRate;
@@ -24,8 +24,9 @@ namespace scheduler
 
         public void Mutate(Timetable chromosome, TimetableLocus locus)
         {
-            var list = _prowadzacy[chromosome[locus].Prowadzacy];
-            chromosome[locus].Prowadzacy = list[_randGenSelector.Next(list.Count)].Prowadzacy;
+            var list = _prowadzacyZajecia[chromosome[locus].Przedmiot];
+            //wybrac prowadzacego ktory ma te zajecia!!
+            chromosome[locus].Prowadzacy = list[_randGenSelector.Next(list.Count)];
         }
 
         public void TryMutate(Timetable chromosome, TimetableLocus locus)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace scheduler
 {
-    interface IMutation<_Chromosome, _Locus>
+    public interface IMutation<_Chromosome, _Locus>
     {
         void Mutate(_Chromosome chromosome, _Locus locus);
         void TryMutate(_Chromosome chromosome, _Locus locus);

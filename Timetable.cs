@@ -5,46 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace scheduler
-{
-
-
-    public class TimetableEvaluator : IEvaluator<double, Timetable>
-    { //to do: evaluation tree
-        public double Evaluate(Timetable item)
-        {
-            return 0.0;
-        }
-    }
-
-    public class TimetablePopupationEvaluator : IEvaluator<bool, IList<Timetable>>
-    {
-        TimetableEvaluator _chromosomeEvaluator;
-
-        public TimetablePopupationEvaluator(TimetableEvaluator chromosomeEvaluator)
-        {
-            _chromosomeEvaluator = chromosomeEvaluator;
-        }
-
-        public bool Evaluate(IList<Timetable> item)
-        {
-            var result = item.Average(x => _chromosomeEvaluator.Evaluate(x));
-            return result >= 0.95;
-        }
-    }
-
+{    
     public class Timetable : IChromosome<TimetableLocus, Zajecia, Timetable>
     {                                                                                  
         private static IList<Zajecia> _genome;
 
         private IDictionary<TimetableLocus, Zajecia> _items;
-        //private Zajecia[,] _items;
-
+        private IMutation<Timetable, TimetableLocus> _mutation;
         private Zajecia _sentry;
 
-        public Timetable()
+        public Timetable(IDictionary<TimetableLocus, Zajecia> items, IMutation<Timetable, TimetableLocus> mutation)
         {
-            //_items = new Zajecia[TimetableLocus.MaxTimeLength, TimetableLocus.MaxClassRoomCount];
+            _items = items;
+            _mutation = mutation;
+            _sentry = null;
+        }
+
+        public Timetable(IMutation<Timetable, TimetableLocus> mutation)
+        {
             _items = new Dictionary<TimetableLocus, Zajecia>();
+            _mutation = mutation;
             _sentry = null;
         }
 
@@ -91,12 +71,16 @@ namespace scheduler
             }
         }
 
-        private void SolveMinorConflicts(Queue<Zajecia> orphants, ICollection<TimetableLocus> accomodation)
+        private void SolveMinorConflicts(Queue<Zajecia> orphants, ICollection<TimetableLocus> accomodation, out IList<TimetableLocus> usedAccomodation)
         {
-            //pierwsza wolna sposrod 
+            usedAccomodation = new List<TimetableLocus>();
+            //pierwsza wolna 
             foreach (var locus in accomodation)
                 if (orphants.Count > 0)
+                {
                     _items[locus] = orphants.Dequeue();
+                    usedAccomodation.Add(locus);
+                }
                 else
                     break;
         }
@@ -113,17 +97,17 @@ namespace scheduler
 
         public Timetable Clone()
         {
-            var result = new Timetable();
+            var result = new Timetable(_mutation);
             foreach (var index in _items.Keys)
                 result._items.Add(index, _items[index]);
             return result;
         }
 
         public Timetable Mix(IList<Timetable> parents, IRandomGenerator<int> randomParent)
-        {
+        {                     
             //mix malych planow
-                   
-            var parenthood = new Dictionary<Zajecia,Timetable>(); //wybor od ktorego rodzica bedzie pobierany gen  
+
+            var parenthood = new Dictionary<Zajecia, Timetable>(); //wybor od ktorego rodzica bedzie pobierany gen  
             var loci = new HashSet<TimetableLocus>();
 
 
@@ -133,36 +117,37 @@ namespace scheduler
                 var randParent = randomParent.Next();
                 parenthood.Add(gen, parents[randParent]);
             }
-                             
+
             //wiem z ktorego rodzica, ale nie wiem na ktorej pozycji jest dany gen
             //zatem lepiej dla kazdego rodzica zrobic liste genow ktore chce z niego pobrac... 
             //przejsc przez wsyzstkie mozliwe miejsca i wydostac gdzie jest dany gen (czyli trzeba umiec sprawdzic)
-                                                     
 
-            //wszystkie pozycje, na ktorych moga pojawic sie geny
             _items.Clear(); //zeby nie byc czyims klonem!!
+            //wyszukiwanie jakie locus zajmuje dany gen w chromosomie rodzica
             foreach (var parent in parents)
-                foreach (var locus in parent._items.Keys)  
-                {                
-                    if(parent == parenthood[parent[locus]])
+                foreach (var locus in parent._items.Keys)
+                {
+                    if (parent == parenthood[parent[locus]])
                     {
                         var gen = parent[locus];
                         //tzn ze to jest szukany locus!!! dla parenthood[parent[locus]]
                         //powinienem go po prostu dodac... z tym ze jezeli bedzie klon ktoregos rodzica, to trzeba pomyslec nad ... dodaj/usun
-                        _items[locus] = gen;
+                        _items[locus] = gen;    
+                        _mutation.TryMutate(this, locus); //mutacje - tam gdzie nie ma konfliktow
                         parenthood.Remove(gen);
-                    }  
+                    }
                     else
-                        loci.Add(locus); 
+                        loci.Add(locus);
                 }
 
             var orphants = new Queue<Zajecia>(parenthood.Keys);
+            IList<TimetableLocus> usedLoci = new List<TimetableLocus>();
 
-            SolveMinorConflicts(orphants, loci);
-          
-            //teoretycznie mam o czynienia z klonem, ktoregos rodzica...mozna to wykorzystac do optymalizacji ?
-            //skleic powyzsze
-            //wyrzucic z obecnego wszystko to, co nie pasuje
+            SolveMinorConflicts(orphants, loci, out usedLoci);
+
+            ////mutacje - tam gdzie wystapily konflikty
+            foreach (var locus in usedLoci)
+                _mutation.TryMutate(this, locus);
 
             return this;
         }
@@ -199,10 +184,16 @@ namespace scheduler
             get { return _items.Values; }
         }
 
-        public IList<Zajecia> Genome
+        public static IList<Zajecia> Genome
         {
             get { return _genome; }
             set { _genome = value; }
         }
+
+        IList<Zajecia> IChromosome<TimetableLocus, Zajecia, Timetable>.Genome
+        {
+            get { return _genome; }
+        }
+
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="GeneticAlgorithm\Selector.cs" />
     <Compile Include="RandomGenerator.cs" />
     <Compile Include="Timetable.cs" />
+    <Compile Include="TimetableEvaluator.cs" />
     <Compile Include="TimetableFactory.cs" />
     <Compile Include="TimetableLocus.cs" />
     <Compile Include="TimetableTeacherMutation.cs" />
