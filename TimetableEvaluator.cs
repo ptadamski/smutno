@@ -9,9 +9,76 @@ namespace scheduler
 
     public class TimetableEvaluator : IEvaluator<double, Timetable>
     { //to do: evaluation tree
-        public double Evaluate(Timetable item)
+
+        int IleRazyWTymSamymCzasie<T>(IDictionary<T, IList<TimetableLocus>> prowadzacy)
+        {                                                                    
+                                                     
+            //(prowadzacy, czas, licznik)    
+            var licznik = new Dictionary<T, Dictionary<int, int>>();
+            Dictionary<int, int> slownik;
+
+            foreach (var e in prowadzacy.Keys)
+            {
+                if (!licznik.TryGetValue(e, out slownik))
+                {
+                    slownik = new Dictionary<int, int>();
+                    licznik.Add(e, slownik);
+                }
+                foreach (var locus in prowadzacy[e])
+                {
+                    if (slownik.ContainsKey(locus.Time))
+                        slownik[locus.Time] += 1;
+                    else
+                        slownik.Add(locus.Time, 1);
+                }
+            }
+
+            var wynik = new Dictionary<T, int>();
+
+            foreach (var e in prowadzacy.Keys)
+                wynik[e] =  licznik[e].Values.Select(x => x).Where(x => x > 1).Sum();
+
+            return wynik.Select(x=>x.Value).Sum();
+        }
+
+        public double Evaluate(Timetable plan)
         {
-            return 0.0;
+            var prowadzacy = new Dictionary<Prowadzący, IList<TimetableLocus>>();
+            var grupy = new Dictionary<Grupa, IList<TimetableLocus>>();
+
+            foreach (var locus in plan.Loci)
+            {
+                IList<TimetableLocus> lista_miejsc;
+                if (!prowadzacy.TryGetValue(plan[locus].Prowadzacy, out lista_miejsc))
+                {                              
+                    lista_miejsc = new List<TimetableLocus>();
+                    prowadzacy.Add(plan[locus].Prowadzacy, lista_miejsc);
+                }
+                lista_miejsc.Add(locus);
+
+
+                if (!grupy.TryGetValue(plan[locus].Grupa, out lista_miejsc))
+                {
+                    lista_miejsc = new List<TimetableLocus>();
+                    grupy.Add(plan[locus].Grupa, lista_miejsc);
+                }
+                lista_miejsc.Add(locus);
+            }
+
+            int konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
+            int konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
+
+            try
+            {
+                return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / plan.Loci.Count;
+            }
+            catch (DivideByZeroException ex)
+            {
+                return -1.0;
+            }
+
+            //zlicz okienka prowadzacego
+            //zlicz okienka grupy
         }
     }
 
