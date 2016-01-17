@@ -115,7 +115,7 @@ namespace scheduler
             IDictionary<Przedmiot, IList<Prowadzący>> prowadzacyZajecia;
             IList<Zajecia> genotyp;
 
-            InitializeFromDataBase(db, "zimowy", out genotyp, out prowadzacyZajecia);
+            InitializeFromDataBase(db, this.comboBox1.Text, out genotyp, out prowadzacyZajecia);
             Application.DoEvents();
 
             //---przypisanie genotypu---
@@ -180,11 +180,10 @@ namespace scheduler
                 var avg = population.Select(x => evalSelector.Evaluate(x)).Average();
                 var max = population.Select(x => evalSelector.Evaluate(x)).Max();
 
-                if (it % 5 == 0)
-                {
-                    series.Points.AddXY(it, avg);
-                    series2.Points.AddXY(it, max);
-                }
+                
+                series.Points.AddXY(it, avg);
+                series2.Points.AddXY(it, max);
+                
                 this.output.AppendText(String.Format(" iteracja nr {0} avg:{1:0.000} max:{2:0.000}\n", it++, avg, max));
 
 
@@ -445,7 +444,7 @@ namespace scheduler
 
             var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
 
-            this.output.AppendText("EXPORT ROZPOCZĘTY");
+            this.output.AppendText("EXPORT ROZPOCZĘTY\n");
 
             foreach (var g in lista_grup)
             {
@@ -478,7 +477,7 @@ namespace scheduler
                     rowIndex++;
                 }
 
-                this.output.AppendText("export dla - " + g.nazwa);
+                this.output.AppendText("export dla - " + g.nazwa + "\n");
                 Application.DoEvents();
 
                 workbook.Write(ms);
@@ -492,7 +491,7 @@ namespace scheduler
                 fs.Close();
                 ms.Close();
             }
-            this.output.AppendText("EXPORT ZAKOŃCZONY");
+            this.output.AppendText("EXPORT ZAKOŃCZONY\n");
         }
 
         private void wybranaGrupa_SelectedIndexChanged(object sender, EventArgs e)
