@@ -26,6 +26,14 @@ namespace scheduler
             IsVisibleInLegend = false
         };
 
+        Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series
+        {
+            Name = "Series2",
+            Color = System.Drawing.Color.Red,
+            ChartType = SeriesChartType.Line,
+            IsVisibleInLegend = false
+        };
+
         const int MaxPopulationCount = 100;
 
         IList<Timetable> population;
@@ -39,10 +47,12 @@ namespace scheduler
         public Form1()
         {
             InitializeComponent();
-            values_init();
             this.wykres.Series.Add(series);
+            this.wykres.Series.Add(series2);
             this.comboBox1.SelectedItem = "zimowy";
             Text = Application.ExecutablePath;
+            Visible = true;
+            values_init();
         }
 
         static void InitializeFromDataBase(BazaDanychDataContext db, string semestr, out IList<Zajecia> genotyp,
@@ -80,6 +90,10 @@ namespace scheduler
                     genotyp.Add(new Zajecia() { Typ = TypZajec.Laboratoria, Grupa = e.Grupa, Przedmiot = e.Przedmiot, Prowadzacy = null, Index = i });
             }
 
+            var t = genotyp.Select(x => x.Grupa).Distinct().Count(); 
+            var m = db.Grupas.Select(x => x).Distinct().Count();
+            var g = listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct().Count();
+            var h = db.Grupas.Select(x => x).Distinct().Except(listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct());
 
             //do mutacji                   
             var prowadzacyWszyscy = db.Prowadzącies.Select(x => x).ToList();
@@ -117,7 +131,7 @@ namespace scheduler
 
             //---komponenty algorytmu---                                               
             population = new List<Timetable>();
-            mutation = new TimetableTeacherMutation(prowadzacyZajecia, randMutation, randGenSelector, 0.002);
+            mutation = new TimetableTeacherMutation(prowadzacyZajecia, randMutation, randGenSelector, 0.02);
             IFactory<Timetable, Timetable> breeder = new TimetableFactory(mutation, randMateUp);
             evalSelector = new TimetableEvaluator();
 
@@ -159,9 +173,16 @@ namespace scheduler
             this.output.AppendText("START\n");
 
             do
-            {               
-                if (it % 5 == 0) series.Points.AddXY(it, population.Select(x => evalSelector.Evaluate(x)).Max());
-                this.output.AppendText(" iteracja nr " + it++ + "\n");
+            {                                                                           
+                var avg = population.Select(x => evalSelector.Evaluate(x)).Average();
+                var max = population.Select(x => evalSelector.Evaluate(x)).Max();
+
+                if (it % 5 == 0)
+                {
+                    series.Points.AddXY(it, avg);
+                    series2.Points.AddXY(it, max);
+                }
+                this.output.AppendText(String.Format(" iteracja nr {0} avg:{1:0.000} max:{2:0.000}\n", it++, avg, max));
 
                 //wydzielenie podzbiorow            
                 var planyGrup = new Dictionary<Grupa, IList<Timetable>>();
@@ -184,8 +205,11 @@ namespace scheduler
                             planGrupy[locus] = osobnik[locus];
 
                         IList<Timetable> lista;
-                        if (!planyGrup.TryGetValue(grupa, out lista))
-                            lista = new List<Timetable>();
+                        if (!planyGrup.TryGetValue(grupa, out lista)) 
+                        {      
+                            lista = new List<Timetable>();  
+                            planyGrup.Add(grupa, lista);
+                        }
 
                         lista.Add(planGrupy);
                     }

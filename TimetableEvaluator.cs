@@ -65,8 +65,8 @@ namespace scheduler
                 lista_miejsc.Add(locus);
             }
 
-            int konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
-            int konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
+            double konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
+            double konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
 
             try
             {
