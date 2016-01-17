@@ -141,7 +141,7 @@ namespace scheduler
             selector = new RouletSelector<Timetable, TimetableLocus, Zajecia>(evalSelector, randSelector);
 
             //---inicjacja populacji---  (calosciowy plan dla uczelni)
-            Application.DoEvents();
+            //Application.DoEvents();
             for (int i = 0; i < MaxPopulationCount; i++)
                 population.Add(breeder.CreateNew());
 
@@ -159,6 +159,8 @@ namespace scheduler
 
             it = 0;
 
+            this.wykres.Series[0].Points.Clear();
+            this.wykres.Series[1].Points.Clear();
             this.comboBox1.Enabled = true;
             this.poprzedni.Enabled = false;
             this.nastepny.Enabled = true;
@@ -308,13 +310,7 @@ namespace scheduler
 
         private void start_Click(object sender, EventArgs e)
         {
-            if (!stop_button)
-            {
-                values_init();
-
-                this.wykres.Series[0].Points.Clear();
-                //to gówno nieczyści
-            }
+            if (!stop_button) values_init();
             else stop_button = false;
 
             this.comboBox1.Enabled = false;
@@ -332,6 +328,7 @@ namespace scheduler
 
         private void restart_Click(object sender, EventArgs e)
         {
+            System.Threading.Thread.Sleep(2000);
             values_init();
             this.output.Clear();
             stop_Click(null, null);
@@ -445,6 +442,7 @@ namespace scheduler
             var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
 
             this.output.AppendText("EXPORT ROZPOCZĘTY\n");
+            this.output.Focus();
 
             foreach (var g in lista_grup)
             {
