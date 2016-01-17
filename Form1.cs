@@ -65,7 +65,7 @@ namespace scheduler
 
             //ustalenie granic dla locus
             var wszystkieSale = db.Salas.Select(x => x).ToList();
-            TimetableLocus.SetBoundry(8 * 10, wszystkieSale.Count);
+            TimetableLocus.SetBoundry(6 * 10, wszystkieSale.Count);
 
             //genotyp = (from przydzial in db.Przypisany_przedmiots
             //         join prowadzacy in db.Prowadzacies on przydzial.id_prowadzacego equals prowadzacy.id
@@ -89,11 +89,6 @@ namespace scheduler
                 for (int i = 0, length = e.Przedmiot.laboratoria / 15; i < length; i++)
                     genotyp.Add(new Zajecia() { Typ = TypZajec.Laboratoria, Grupa = e.Grupa, Przedmiot = e.Przedmiot, Prowadzacy = null, Index = i });
             }
-
-            var t = genotyp.Select(x => x.Grupa).Distinct().Count(); 
-            var m = db.Grupas.Select(x => x).Distinct().Count();
-            var g = listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct().Count();
-            var h = db.Grupas.Select(x => x).Distinct().Except(listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct());
 
             //do mutacji                   
             var prowadzacyWszyscy = db.Prowadzącies.Select(x => x).ToList();
@@ -178,9 +173,10 @@ namespace scheduler
             this.output.AppendText("START\n");
 
             do
-            {                                                                           
-                var avg = population.Select(x => evalSelector.Evaluate(x)).Average();
-                var max = population.Select(x => evalSelector.Evaluate(x)).Max();
+            {
+                var eval_list = population.Select(x => evalSelector.Evaluate(x));
+                var avg = eval_list.Average();
+                var max = eval_list.Max();
 
                 
                 series.Points.AddXY(it, avg);
@@ -503,24 +499,24 @@ namespace scheduler
 
             var grupa = osobnik.Loci.Where(x => this.wybranaGrupa.Text == osobnik[x].Grupa.nazwa).ToList();
 
-            this.dataGridView6.Rows.Insert(0, "8", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "7", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "6", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "5", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "4", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "3", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "2", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "1", "", "", "", "", "", "");
+            //this.dataGridView6.Rows.Insert(0, "8", "", "", "", "", "", "");
+            //this.dataGridView6.Rows.Insert(0, "20:00 - 21:30", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "17:15 - 19:45", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "15:30 - 17:00", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "13:45 - 15:15", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "11:45 - 13:15", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "10:00 - 11:30", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "8:15 - 9:45", "", "", "", "", "", "");
 
             foreach (var o in grupa)
             {
                 var x = osobnik[o].Przedmiot;
 
-                if (this.poprzedni.Enabled == false && o.Time < 8 * 5) 
-                    this.dataGridView6.Rows[o.Time % 8].Cells[(o.Time / 8) + 1].Value = x.nazwa;
+                if (this.poprzedni.Enabled == false && o.Time < 6 * 5) 
+                    this.dataGridView6.Rows[o.Time % 6].Cells[(o.Time / 6) + 1].Value = x.nazwa;
                 
-                if (this.nastepny.Enabled == false && o.Time >= 8 * 5) 
-                    this.dataGridView6.Rows[o.Time % 8].Cells[((o.Time / 8) + 1) - 5].Value = x.nazwa;
+                if (this.nastepny.Enabled == false && o.Time >= 6 * 5) 
+                    this.dataGridView6.Rows[o.Time % 6].Cells[((o.Time / 6) + 1) - 5].Value = x.nazwa;
             } 
         }
 
