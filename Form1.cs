@@ -55,7 +55,7 @@ namespace scheduler
 
             //ustalenie granic dla locus
             var wszystkieSale = db.Salas.Select(x => x).ToList();
-            TimetableLocus.SetBoundry(8 * 14, wszystkieSale.Count);
+            TimetableLocus.SetBoundry(8 * 10, wszystkieSale.Count);
 
             //genotyp = (from przydzial in db.Przypisany_przedmiots
             //         join prowadzacy in db.Prowadzacies on przydzial.id_prowadzacego equals prowadzacy.id
@@ -146,6 +146,9 @@ namespace scheduler
             it = 0;
 
             this.comboBox1.Enabled = true;
+            this.poprzedni.Enabled = false;
+            this.nastepny.Enabled = true;
+            wybranaGrupa_SelectedIndexChanged(null, null);
             this.dataGridView1.ReadOnly = false; this.dataGridView1.AllowUserToDeleteRows = true;
             this.dataGridView2.ReadOnly = false; this.dataGridView2.AllowUserToDeleteRows = true;
             this.dataGridView3.ReadOnly = false; this.dataGridView3.AllowUserToDeleteRows = true;
@@ -160,7 +163,8 @@ namespace scheduler
 
             do
             {               
-                if (it % 5 == 0) series.Points.AddXY(it, population.Select(x => evalSelector.Evaluate(x)).Max());
+                //if (it % 5 == 0) 
+                series.Points.AddXY(it, population.Select(x => evalSelector.Evaluate(x)).Average());
                 this.output.AppendText(" iteracja nr " + it++ + "\n");
 
                 //wydzielenie podzbiorow            
@@ -219,17 +223,17 @@ namespace scheduler
                         osobnik.Concat(planGrupy.Value[i]);
                     }
                 }
-                
-
             } while ((population.Select(x => evalSelector.Evaluate(x)).Average() < 0.95) && !stop_button);
+
+            
 
             if (!stop_button)
             {
                 //wypisanie wyniku
 
-                this.output.AppendText("ZAKOŃCZONO");
+                this.output.AppendText("ZAKOŃCZONO\n");
                 stop_Click(null, null);
-                series.SetDefault(true);
+                stop_button = false;
             }
             else
             {
@@ -243,6 +247,8 @@ namespace scheduler
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Grupa' table. You can move, or remove it, as needed.
+            this.grupaTableAdapter.Fill(this.dtas_s383964DataSet1.Grupa);
             // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Przypisany_przedmiot' table. You can move, or remove it, as needed.
             this.przypisany_przedmiotTableAdapter.Fill(this.dtas_s383964DataSet1.Przypisany_przedmiot);
             // TODO: This line of code loads data into the 'dtas_s383964DataSet1.Sala' table. You can move, or remove it, as needed.
@@ -273,6 +279,8 @@ namespace scheduler
             this.start.Visible = true;
             this.restart.Visible = false;
             this.eksport.Enabled = true;
+            ((Control)this.tabPage7).Enabled = true;
+            wybranaGrupa_SelectedIndexChanged(null, null);
         }
 
         private void start_Click(object sender, EventArgs e)
@@ -290,6 +298,7 @@ namespace scheduler
             this.start.Visible = false;
             this.restart.Visible = true;
             this.eksport.Enabled = false;
+            ((Control)this.tabPage7).Enabled = false;
             this.dataGridView1.ReadOnly = true; this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView2.ReadOnly = true; this.dataGridView2.AllowUserToDeleteRows = false;
             this.dataGridView3.ReadOnly = true; this.dataGridView3.AllowUserToDeleteRows = false;
@@ -407,39 +416,96 @@ namespace scheduler
 
         public void excel_eksport(string path)
         {
-            MemoryStream ms = new MemoryStream();
+            var n = population.Select(x => evalSelector.Evaluate(x)).Max();
+            Timetable osobnik = population.Where(x => n == evalSelector.Evaluate(x)).First();
 
-            IWorkbook workbook = new HSSFWorkbook();//Create an excel Workbook
-            ISheet sheet = workbook.CreateSheet();//Create a work table in the table
-            IRow headerRow = sheet.CreateRow(0); //To add a row in the table
+            var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
 
-            foreach (DataGridViewColumn column in dataGridView1.Columns) headerRow.CreateCell(column.Index).SetCellValue(column.HeaderText);
-
-            int rowIndex = 1;
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            foreach (var g in lista_grup)
             {
-                IRow dataRow = sheet.CreateRow(rowIndex);
-                foreach (DataGridViewColumn column in dataGridView1.Columns)
+                this.wybranaGrupa.SelectedItem = g.nazwa;
+                wybranaGrupa_SelectedIndexChanged(null, null);
+
+                MemoryStream ms = new MemoryStream();
+
+                IWorkbook workbook = new HSSFWorkbook();//Create an excel Workbook
+                ISheet sheet = workbook.CreateSheet();//Create a work table in the table
+                IRow headerRow = sheet.CreateRow(0); //To add a row in the table
+
+                foreach (DataGridViewColumn column in dataGridView6.Columns) headerRow.CreateCell(column.Index).SetCellValue(column.HeaderText);
+
+                int rowIndex = 1;
+                foreach (DataGridViewRow row in dataGridView6.Rows)
                 {
-                    if (row.Cells[column.Index].Value == null)
+                    IRow dataRow = sheet.CreateRow(rowIndex);
+                    foreach (DataGridViewColumn column in dataGridView6.Columns)
                     {
-                        dataRow.CreateCell(column.Index).SetCellValue("");
+                        if (row.Cells[column.Index].Value == null)
+                        {
+                            dataRow.CreateCell(column.Index).SetCellValue("");
+                        }
+                        else dataRow.CreateCell(column.Index).SetCellValue(row.Cells[column.Index].Value.ToString());
                     }
-                    else dataRow.CreateCell(column.Index).SetCellValue(row.Cells[column.Index].Value.ToString());
+                    rowIndex++;
                 }
-                rowIndex++;
-            }
 
-            workbook.Write(ms);
-            ms.Flush();
-            ms.Position = 0;
+                workbook.Write(ms);
+                ms.Flush();
+                ms.Position = 0;
 
+                //MemoryStream ms = ExcelHelper.DataToExcel(dt);
+                FileStream fs = new FileStream
+                    ((path + "\\" +  g.nazwa + ".xls"), FileMode.Create);
+                ms.WriteTo(fs);
+                fs.Close();
+                ms.Close();
+            }            
+        }
 
-            //MemoryStream ms = ExcelHelper.DataToExcel(dt);
-            FileStream fs = new FileStream(path + "\\test.xls", FileMode.Create);
-            ms.WriteTo(fs);
-            fs.Close();
-            ms.Close();
+        private void wybranaGrupa_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.dataGridView6.Rows.Clear();
+
+            var n = population.Select(x => evalSelector.Evaluate(x)).Max();
+            Timetable osobnik = population.Where(x => n == evalSelector.Evaluate(x)).First();
+            
+            var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
+
+            var grupa = osobnik.Loci.Where(x => this.wybranaGrupa.Text == osobnik[x].Grupa.nazwa).ToList();
+
+            this.dataGridView6.Rows.Insert(0, "8", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "7", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "6", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "5", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "4", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "3", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "2", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "1", "", "", "", "", "", "");
+
+            foreach (var o in grupa)
+            {
+                var x = osobnik[o].Przedmiot;
+
+                if (this.poprzedni.Enabled == false && o.Time < 8 * 5) 
+                    this.dataGridView6.Rows[o.Time % 8].Cells[(o.Time / 8) + 1].Value = x.nazwa;
+                
+                if (this.nastepny.Enabled == false && o.Time >= 8 * 5) 
+                    this.dataGridView6.Rows[o.Time % 8].Cells[((o.Time / 8) + 1) - 5].Value = x.nazwa;
+            } 
+        }
+
+        private void poprzedni_Click(object sender, EventArgs e)
+        {
+            this.poprzedni.Enabled = false;
+            this.nastepny.Enabled = true;
+            wybranaGrupa_SelectedIndexChanged(null, null);
+        }
+
+        private void nastepny_Click(object sender, EventArgs e)
+        {
+            this.poprzedni.Enabled = true;
+            this.nastepny.Enabled = false;
+            wybranaGrupa_SelectedIndexChanged(null, null);
         }
     }
 }

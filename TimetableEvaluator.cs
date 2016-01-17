@@ -65,12 +65,13 @@ namespace scheduler
                 lista_miejsc.Add(locus);
             }
 
-            int konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
-            int konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
+            Double konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
+            Double konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
 
             try
             {
-                return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / plan.Loci.Count;
+                Console.WriteLine("{0} - {1}", konfliktyGrup, konfliktyProwadzacych);
+                return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / Math.Sqrt(plan.Loci.Count);
             }
             catch (DivideByZeroException ex)
             {

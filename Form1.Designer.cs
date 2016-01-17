@@ -31,8 +31,8 @@ namespace scheduler
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.stop = new System.Windows.Forms.Button();
             this.start = new System.Windows.Forms.Button();
             this.output = new System.Windows.Forms.RichTextBox();
@@ -95,6 +95,17 @@ namespace scheduler
             this.rodzajzajęćDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.przypisanyprzedmiotBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.update_5 = new System.Windows.Forms.Button();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.dataGridView6 = new System.Windows.Forms.DataGridView();
+            this.Godzina = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Poniedzialek = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Wtorek = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sroda = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Czwartek = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Piatek = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.wybranaGrupa = new System.Windows.Forms.ComboBox();
+            this.grupaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.Update = new System.Windows.Forms.Button();
             this.przedmiotBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.przedmiotTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.PrzedmiotTableAdapter();
@@ -104,6 +115,9 @@ namespace scheduler
             this.przypisany_przedmiotTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.Przypisany_przedmiotTableAdapter();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.grupaTableAdapter = new scheduler.dtas_s383964DataSetTableAdapters.GrupaTableAdapter();
+            this.nastepny = new System.Windows.Forms.Button();
+            this.poprzedni = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -146,6 +160,13 @@ namespace scheduler
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.przedmiotBindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.przypisanyprzedmiotBindingSource)).BeginInit();
+            this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grupaBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.przedmiotBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -187,6 +208,7 @@ namespace scheduler
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage6);
+            this.tabControl1.Controls.Add(this.tabPage7);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -256,10 +278,10 @@ namespace scheduler
             // 
             // wykres
             // 
-            chartArea1.Name = "Wykres";
-            this.wykres.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.wykres.Legends.Add(legend1);
+            chartArea4.Name = "Wykres";
+            this.wykres.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.wykres.Legends.Add(legend4);
             this.wykres.Location = new System.Drawing.Point(293, 33);
             this.wykres.Name = "wykres";
             this.wykres.Size = new System.Drawing.Size(333, 314);
@@ -735,6 +757,110 @@ namespace scheduler
             this.update_5.UseVisualStyleBackColor = true;
             this.update_5.Click += new System.EventHandler(this.update5_Click);
             // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.splitContainer1);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(634, 355);
+            this.tabPage7.TabIndex = 6;
+            this.tabPage7.Text = "Plany grup";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.dataGridView6);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.poprzedni);
+            this.splitContainer1.Panel2.Controls.Add(this.nastepny);
+            this.splitContainer1.Panel2.Controls.Add(this.wybranaGrupa);
+            this.splitContainer1.Size = new System.Drawing.Size(628, 349);
+            this.splitContainer1.SplitterDistance = 305;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // dataGridView6
+            // 
+            this.dataGridView6.AllowUserToAddRows = false;
+            this.dataGridView6.AllowUserToDeleteRows = false;
+            this.dataGridView6.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView6.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Godzina,
+            this.Poniedzialek,
+            this.Wtorek,
+            this.Sroda,
+            this.Czwartek,
+            this.Piatek});
+            this.dataGridView6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView6.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView6.Name = "dataGridView6";
+            this.dataGridView6.ReadOnly = true;
+            this.dataGridView6.Size = new System.Drawing.Size(628, 305);
+            this.dataGridView6.TabIndex = 0;
+            // 
+            // Godzina
+            // 
+            this.Godzina.HeaderText = "Godzina";
+            this.Godzina.Name = "Godzina";
+            this.Godzina.ReadOnly = true;
+            this.Godzina.Width = 70;
+            // 
+            // Poniedzialek
+            // 
+            this.Poniedzialek.HeaderText = "Poniedzialek";
+            this.Poniedzialek.Name = "Poniedzialek";
+            this.Poniedzialek.ReadOnly = true;
+            // 
+            // Wtorek
+            // 
+            this.Wtorek.HeaderText = "Wtorek";
+            this.Wtorek.Name = "Wtorek";
+            this.Wtorek.ReadOnly = true;
+            // 
+            // Sroda
+            // 
+            this.Sroda.HeaderText = "Środa";
+            this.Sroda.Name = "Sroda";
+            this.Sroda.ReadOnly = true;
+            // 
+            // Czwartek
+            // 
+            this.Czwartek.HeaderText = "Czwartek";
+            this.Czwartek.Name = "Czwartek";
+            this.Czwartek.ReadOnly = true;
+            // 
+            // Piatek
+            // 
+            this.Piatek.HeaderText = "Piątek";
+            this.Piatek.Name = "Piatek";
+            this.Piatek.ReadOnly = true;
+            // 
+            // wybranaGrupa
+            // 
+            this.wybranaGrupa.DataSource = this.grupaBindingSource;
+            this.wybranaGrupa.DisplayMember = "nazwa";
+            this.wybranaGrupa.FormattingEnabled = true;
+            this.wybranaGrupa.Location = new System.Drawing.Point(502, 8);
+            this.wybranaGrupa.Name = "wybranaGrupa";
+            this.wybranaGrupa.Size = new System.Drawing.Size(121, 21);
+            this.wybranaGrupa.TabIndex = 0;
+            this.wybranaGrupa.SelectedIndexChanged += new System.EventHandler(this.wybranaGrupa_SelectedIndexChanged);
+            // 
+            // grupaBindingSource
+            // 
+            this.grupaBindingSource.DataMember = "Grupa";
+            this.grupaBindingSource.DataSource = this.dtas_s383964DataSet1;
+            this.grupaBindingSource.Sort = "Nazwa";
+            // 
             // Update
             // 
             this.Update.Location = new System.Drawing.Point(0, 0);
@@ -770,6 +896,30 @@ namespace scheduler
             // saveFileDialog1
             // 
             this.saveFileDialog1.DefaultExt = "xslx";
+            // 
+            // grupaTableAdapter
+            // 
+            this.grupaTableAdapter.ClearBeforeFill = true;
+            // 
+            // nastepny
+            // 
+            this.nastepny.Location = new System.Drawing.Point(123, 3);
+            this.nastepny.Name = "nastepny";
+            this.nastepny.Size = new System.Drawing.Size(112, 28);
+            this.nastepny.TabIndex = 13;
+            this.nastepny.Text = "Następny";
+            this.nastepny.UseVisualStyleBackColor = true;
+            this.nastepny.Click += new System.EventHandler(this.nastepny_Click);
+            // 
+            // poprzedni
+            // 
+            this.poprzedni.Location = new System.Drawing.Point(5, 3);
+            this.poprzedni.Name = "poprzedni";
+            this.poprzedni.Size = new System.Drawing.Size(112, 28);
+            this.poprzedni.TabIndex = 14;
+            this.poprzedni.Text = "Poprzedni";
+            this.poprzedni.UseVisualStyleBackColor = true;
+            this.poprzedni.Click += new System.EventHandler(this.poprzedni_Click);
             // 
             // Form1
             // 
@@ -824,6 +974,13 @@ namespace scheduler
             ((System.ComponentModel.ISupportInitialize)(this.prowadzącyBindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.przedmiotBindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.przypisanyprzedmiotBindingSource)).EndInit();
+            this.tabPage7.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grupaBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.przedmiotBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -902,6 +1059,20 @@ namespace scheduler
         private System.Windows.Forms.Button eksport;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.DataGridView dataGridView6;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Godzina;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Poniedzialek;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Wtorek;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sroda;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Czwartek;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Piatek;
+        private System.Windows.Forms.ComboBox wybranaGrupa;
+        private System.Windows.Forms.BindingSource grupaBindingSource;
+        private dtas_s383964DataSetTableAdapters.GrupaTableAdapter grupaTableAdapter;
+        private System.Windows.Forms.Button poprzedni;
+        private System.Windows.Forms.Button nastepny;
     }
 }
 
