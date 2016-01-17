@@ -445,6 +445,8 @@ namespace scheduler
 
             var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
 
+            this.output.AppendText("EXPORT ROZPOCZĘTY");
+
             foreach (var g in lista_grup)
             {
                 this.wybranaGrupa.Text = g.nazwa;
@@ -468,10 +470,16 @@ namespace scheduler
                         {
                             dataRow.CreateCell(column.Index).SetCellValue("");
                         }
-                        else dataRow.CreateCell(column.Index).SetCellValue(row.Cells[column.Index].Value.ToString());
+                        else
+                        {
+                            dataRow.CreateCell(column.Index).SetCellValue(row.Cells[column.Index].Value.ToString());                           
+                        }
                     }
                     rowIndex++;
                 }
+
+                this.output.AppendText("export dla - " + g.nazwa);
+                Application.DoEvents();
 
                 workbook.Write(ms);
                 ms.Flush();
@@ -483,7 +491,8 @@ namespace scheduler
                 ms.WriteTo(fs);
                 fs.Close();
                 ms.Close();
-            }            
+            }
+            this.output.AppendText("EXPORT ZAKOŃCZONY");
         }
 
         private void wybranaGrupa_SelectedIndexChanged(object sender, EventArgs e)
