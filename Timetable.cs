@@ -43,7 +43,10 @@ namespace scheduler
                 else
                     _items.Add(index, value);
             }
-            SolveMajorConflicts(orphants);
+
+            if (orphants.Count>0)
+                SolveMajorConflicts(orphants);
+
             return result;
         }
 
@@ -108,13 +111,12 @@ namespace scheduler
             //mix malych planow
 
             var parenthood = new Dictionary<Zajecia, Timetable>(); //wybor od ktorego rodzica bedzie pobierany gen  
-            var loci = new HashSet<TimetableLocus>();
-
+            var freeLoci = new HashSet<TimetableLocus>();
 
             //zadecydowac, ktory rodzic jest wlascicielem genu
             foreach (var gen in _items.Values)
             {
-                var randParent = randomParent.Next();
+                var randParent = randomParent.Next(parents.Count);
                 parenthood.Add(gen, parents[randParent]);
             }
 
@@ -123,6 +125,7 @@ namespace scheduler
             //przejsc przez wsyzstkie mozliwe miejsca i wydostac gdzie jest dany gen (czyli trzeba umiec sprawdzic)
 
             _items.Clear(); //zeby nie byc czyims klonem!!
+            var dodaneZajecia = new List<Zajecia>();
             //wyszukiwanie jakie locus zajmuje dany gen w chromosomie rodzica
             foreach (var parent in parents)
                 foreach (var locus in parent._items.Keys)
@@ -132,18 +135,21 @@ namespace scheduler
                         var gen = parent[locus];
                         //tzn ze to jest szukany locus!!! dla parenthood[parent[locus]]
                         //powinienem go po prostu dodac... z tym ze jezeli bedzie klon ktoregos rodzica, to trzeba pomyslec nad ... dodaj/usun
-                        _items[locus] = gen;    
-                        _mutation.TryMutate(this, locus); //mutacje - tam gdzie nie ma konfliktow
-                        parenthood.Remove(gen);
+                        _items[locus] = gen;
+                        _mutation.TryMutate(this, locus); //mutacje - tam gdzie nie ma konfliktow   
+                        dodaneZajecia.Add(gen);
+
+                        //parenthood.Remove(gen);
                     }
-                    else
-                        loci.Add(locus);
+                    else //konflikt
+                        freeLoci.Add(locus);
                 }
 
-            var orphants = new Queue<Zajecia>(parenthood.Keys);
+            
+            var orphants = new Queue<Zajecia>(parenthood.Keys.Except(dodaneZajecia));
             IList<TimetableLocus> usedLoci = new List<TimetableLocus>();
 
-            SolveMinorConflicts(orphants, loci, out usedLoci);
+            SolveMinorConflicts(orphants, freeLoci, out usedLoci);
 
             ////mutacje - tam gdzie wystapily konflikty
             foreach (var locus in usedLoci)
