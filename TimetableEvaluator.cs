@@ -71,8 +71,7 @@ namespace scheduler
 
             try
             {
-                Console.WriteLine("{0} - {1}", konfliktyGrup, konfliktyProwadzacych);
-                return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / Math.Sqrt(plan.Loci.Count);
+                return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / plan.Loci.Count;
             }
             catch (DivideByZeroException ex)
             {

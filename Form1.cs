@@ -447,7 +447,7 @@ namespace scheduler
 
             foreach (var g in lista_grup)
             {
-                this.wybranaGrupa.SelectedItem = g.nazwa;
+                this.wybranaGrupa.Text = g.nazwa;
                 wybranaGrupa_SelectedIndexChanged(null, null);
 
                 MemoryStream ms = new MemoryStream();
