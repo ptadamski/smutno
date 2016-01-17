@@ -176,12 +176,6 @@ namespace scheduler
             this.output.AppendText("START\n");
 
             do
-<<<<<<< HEAD
-            {               
-                //if (it % 5 == 0) 
-                series.Points.AddXY(it, population.Select(x => evalSelector.Evaluate(x)).Average());
-                this.output.AppendText(" iteracja nr " + it++ + "\n");
-=======
             {                                                                           
                 var avg = population.Select(x => evalSelector.Evaluate(x)).Average();
                 var max = population.Select(x => evalSelector.Evaluate(x)).Max();
@@ -192,7 +186,7 @@ namespace scheduler
                     series2.Points.AddXY(it, max);
                 }
                 this.output.AppendText(String.Format(" iteracja nr {0} avg:{1:0.000} max:{2:0.000}\n", it++, avg, max));
->>>>>>> origin/master
+
 
                 //wydzielenie podzbiorow            
                 var planyGrup = new Dictionary<Grupa, IList<Timetable>>();

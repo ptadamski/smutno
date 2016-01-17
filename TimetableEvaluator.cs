@@ -65,13 +65,9 @@ namespace scheduler
                 lista_miejsc.Add(locus);
             }
 
-<<<<<<< HEAD
+
             Double konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
             Double konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
-=======
-            double konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
-            double konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
->>>>>>> origin/master
 
             try
             {
