@@ -66,7 +66,7 @@ namespace scheduler
 
             //ustalenie granic dla locus
             var wszystkieSale = db.Salas.Select(x => x).ToList();
-            TimetableLocus.SetBoundry(8 * 10, wszystkieSale.Count);
+            TimetableLocus.SetBoundry(6 * 10, wszystkieSale.Count);
 
             //genotyp = (from przydzial in db.Przypisany_przedmiots
             //         join prowadzacy in db.Prowadzacies on przydzial.id_prowadzacego equals prowadzacy.id
@@ -134,7 +134,7 @@ namespace scheduler
             selector = new RouletSelector<Timetable, TimetableLocus, Zajecia>(evalSelector, randSelector);
 
             //---inicjacja populacji---  (calosciowy plan dla uczelni)
-            Application.DoEvents();
+            //Application.DoEvents();
             for (int i = 0; i < MaxPopulationCount; i++)
                 population.Add(breeder.CreateNew());
 
@@ -152,6 +152,8 @@ namespace scheduler
 
             it = 0;
 
+            this.wykres.Series[0].Points.Clear();
+            this.wykres.Series[1].Points.Clear();
             this.comboBox1.Enabled = true;
             this.poprzedni.Enabled = false;
             this.nastepny.Enabled = true;
@@ -170,7 +172,7 @@ namespace scheduler
 
             do
             {
-                var eval_list = population.Select(x => evalSelector.Evaluate(x));                        
+                var eval_list = population.Select(x => evalSelector.Evaluate(x));
                 var avg = eval_list.Average();
                 var max = eval_list.Max();
 
@@ -301,13 +303,7 @@ namespace scheduler
 
         private void start_Click(object sender, EventArgs e)
         {
-            if (!stop_button)
-            {
-                values_init();
-
-                this.wykres.Series[0].Points.Clear();
-                //to gówno nieczyści
-            }
+            if (!stop_button) values_init();
             else stop_button = false;
 
             this.comboBox1.Enabled = false;
@@ -325,6 +321,7 @@ namespace scheduler
 
         private void restart_Click(object sender, EventArgs e)
         {
+            System.Threading.Thread.Sleep(2000);
             values_init();
             this.output.Clear();
             stop_Click(null, null);
@@ -438,6 +435,7 @@ namespace scheduler
             var lista_grup = osobnik.Gens.Select(x => x.Grupa).Distinct();
 
             this.output.AppendText("EXPORT ROZPOCZĘTY\n");
+            this.output.Focus();
 
             foreach (var g in lista_grup)
             {
@@ -498,24 +496,24 @@ namespace scheduler
 
             var grupa = osobnik.Loci.Where(x => this.wybranaGrupa.Text == osobnik[x].Grupa.nazwa).ToList();
 
-            this.dataGridView6.Rows.Insert(0, "8", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "7", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "6", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "5", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "4", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "3", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "2", "", "", "", "", "", "");
-            this.dataGridView6.Rows.Insert(0, "1", "", "", "", "", "", "");
+            //this.dataGridView6.Rows.Insert(0, "8", "", "", "", "", "", "");
+            //this.dataGridView6.Rows.Insert(0, "20:00 - 21:30", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "17:15 - 19:45", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "15:30 - 17:00", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "13:45 - 15:15", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "11:45 - 13:15", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "10:00 - 11:30", "", "", "", "", "", "");
+            this.dataGridView6.Rows.Insert(0, "8:15 - 9:45", "", "", "", "", "", "");
 
             foreach (var o in grupa)
             {
                 var x = osobnik[o].Przedmiot;
 
-                if (this.poprzedni.Enabled == false && o.Time < 8 * 5) 
-                    this.dataGridView6.Rows[o.Time % 8].Cells[(o.Time / 8) + 1].Value = x.nazwa;
+                if (this.poprzedni.Enabled == false && o.Time < 6 * 5) 
+                    this.dataGridView6.Rows[o.Time % 6].Cells[(o.Time / 6) + 1].Value = x.nazwa;
                 
-                if (this.nastepny.Enabled == false && o.Time >= 8 * 5) 
-                    this.dataGridView6.Rows[o.Time % 8].Cells[((o.Time / 8) + 1) - 5].Value = x.nazwa;
+                if (this.nastepny.Enabled == false && o.Time >= 6 * 5) 
+                    this.dataGridView6.Rows[o.Time % 6].Cells[((o.Time / 6) + 1) - 5].Value = x.nazwa;
             } 
         }
 
