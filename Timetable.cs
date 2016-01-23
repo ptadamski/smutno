@@ -98,6 +98,8 @@ namespace scheduler
             throw new NotImplementedException();
         }
 
+        //public Timetable[] Subsets(params IEqualityComparer<Zajecia> criteria) { foreach criteria while queue isn't empty add to queue subset of items divided by criteria  }
+
         public Timetable Clone()
         {
             var result = new Timetable(_mutation);

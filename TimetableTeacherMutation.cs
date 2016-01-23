@@ -25,6 +25,7 @@ namespace scheduler
         public void Mutate(Timetable chromosome, TimetableLocus locus)
         {
             var t = chromosome[locus].Przedmiot;
+            var r = _prowadzacyZajecia.Where(x => x.Key.Equals(t)).ToList();
             var list = _prowadzacyZajecia[t];
             //wybrac prowadzacego ktory ma te zajecia!!
             chromosome[locus].Prowadzacy = list[_randGenSelector.Next(list.Count)];

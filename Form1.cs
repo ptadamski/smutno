@@ -41,6 +41,7 @@ namespace scheduler
         IEvaluator<double, Timetable> evalSelector;
         IReproducer<Timetable> reproducer;
         ISelector<Timetable> selector;
+        IFactory<Timetable, Timetable> breeder;
 
         int it = 0;
 
@@ -75,7 +76,6 @@ namespace scheduler
 
 
             //do ustalenia genotypu
-            var l = new { db.Przedmiots.First().rok, db.Przedmiots.First().kierunek };
             var listaObligatoryjnychPrzedmiotow = (from przedmiot in przedmiotyWSemestrze
                                                    join grupa in db.Grupas on new { przedmiot.rok, przedmiot.kierunek } equals new { grupa.rok, grupa.kierunek }
                                                    select new { Grupa = grupa, Przedmiot = przedmiot }).ToList();
@@ -90,21 +90,14 @@ namespace scheduler
                     genotyp.Add(new Zajecia() { Typ = TypZajec.Laboratoria, Grupa = e.Grupa, Przedmiot = e.Przedmiot, Prowadzacy = null, Index = i });
             }
 
-            var t = genotyp.Select(x => x.Grupa).Distinct().Count(); 
-            var m = db.Grupas.Select(x => x).Distinct().Count();
-            var g = listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct().Count();
-            var h = db.Grupas.Select(x => x).Distinct().Except(listaObligatoryjnychPrzedmiotow.Select(x => x.Grupa).Distinct());
-
             //do mutacji                   
             var prowadzacyWszyscy = db.Prowadzącies.Select(x => x).ToList();
-            var n = 0;
             foreach (var e in przedmiotyWSemestrze)
             {
                 var przypisaneZajecia = (from przydzial in db.Przypisany_przedmiots
                                          where przydzial.Przedmiot.Equals(e)
                                          select przydzial.Prowadzący).ToList();
                 prowadzacyZajecia.Add(e, przypisaneZajecia);
-                n = n + przypisaneZajecia.Count;
             }
         }
 
@@ -132,7 +125,7 @@ namespace scheduler
             //---komponenty algorytmu---                                               
             population = new List<Timetable>();
             mutation = new TimetableTeacherMutation(prowadzacyZajecia, randMutation, randGenSelector, 0.02);
-            IFactory<Timetable, Timetable> breeder = new TimetableFactory(mutation, randMateUp);
+            breeder = new TimetableFactory(mutation, randMateUp);
             evalSelector = new TimetableEvaluator();
 
             //Timetable primeChromosome = breeder.CreateNew();
@@ -176,15 +169,15 @@ namespace scheduler
             this.output.AppendText("START\n");
 
             do
-            {                                                                           
-                var avg = population.Select(x => evalSelector.Evaluate(x)).Average();
-                var max = population.Select(x => evalSelector.Evaluate(x)).Max();
+            {
+                var eval_list = population.Select(x => evalSelector.Evaluate(x));                        
+                var avg = eval_list.Average();
+                var max = eval_list.Max();
 
-                
                 series.Points.AddXY(it, avg);
                 series2.Points.AddXY(it, max);
                 
-                this.output.AppendText(String.Format(" iteracja nr {0} avg:{1:0.000} max:{2:0.000}\n", it++, avg, max));
+                this.output.AppendText(String.Format(" iteracja nr {0}  avg:{1:0.000}  max:{2:0.000}\n", it++, avg, max));
 
 
                 //wydzielenie podzbiorow            

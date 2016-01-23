@@ -69,14 +69,10 @@ namespace scheduler
             Double konfliktyProwadzacych = IleRazyWTymSamymCzasie<Prowadzący>(prowadzacy);
             Double konfliktyGrup = IleRazyWTymSamymCzasie<Grupa>(grupy);
 
-            try
-            {
+            if (plan.Loci.Count>0)  
                 return 1.0 - (konfliktyGrup + konfliktyProwadzacych) / plan.Loci.Count;
-            }
-            catch (DivideByZeroException ex)
-            {
-                return -1.0;
-            }
+
+            return -1.0;
 
             //zlicz okienka prowadzacego
             //zlicz okienka grupy
